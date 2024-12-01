@@ -2,8 +2,9 @@
 import React, { useState } from "react";
 import { InputText } from "primereact/inputtext";
 import movieIcon from '../assets/images/from-cover.jpg'
+import NopeMovieIcon from '../assets/images/Nope 2022 Movie Poster 4k UHD.jpeg'
 
-function Channels() {
+function AllChannels() {
   const [value, setValue] = useState("");
 
   return (
@@ -11,7 +12,7 @@ function Channels() {
       {/* add for loop rendering channels */}
       <div className="list-channel">
         <div className="list-channel-image">
-          <img src={movieIcon} className="channel-movie-cover"/>
+          <img src={NopeMovieIcon} className="channel-movie-cover"/>
         </div>
         <div className="list-channel-text-info">
           <div className="channel-header">
@@ -20,7 +21,9 @@ function Channels() {
           </div>
           <div className="channel-body">
             <div className="list-channel-last-text">Guys season 2 is out...</div>
-            <div className="list-channel-num-chats">35</div>
+            <div className="list-channel-num-chats">
+                <p>35</p>
+            </div>
           </div>
         </div>
       </div>
@@ -36,7 +39,9 @@ function Channels() {
           </div>
           <div className="channel-body">
             <div className="list-channel-last-text">Guys season 2 is out...</div>
-            <div className="list-channel-num-chats">35</div>
+            <div className="list-channel-num-chats">
+                <p>35</p>
+            </div>
           </div>
         </div>
       </div>
@@ -52,7 +57,9 @@ function Channels() {
           </div>
           <div className="channel-body">
             <div className="list-channel-last-text">Guys season 2 is out...</div>
-            <div className="list-channel-num-chats">35</div>
+            <div className="list-channel-num-chats">
+                <p>35</p>
+            </div>
           </div>
         </div>
       </div>
@@ -68,7 +75,9 @@ function Channels() {
           </div>
           <div className="channel-body">
             <div className="list-channel-last-text">Guys season 2 is out...</div>
-            <div className="list-channel-num-chats">35</div>
+            <div className="list-channel-num-chats">
+                <p>35</p>
+            </div>
           </div>
         </div>
       </div>
@@ -84,7 +93,9 @@ function Channels() {
           </div>
           <div className="channel-body">
             <div className="list-channel-last-text">Guys season 2 is out...</div>
-            <div className="list-channel-num-chats">35</div>
+            <div className="list-channel-num-chats">
+                <p>35</p>
+            </div>
           </div>
         </div>
       </div>
@@ -111,4 +122,4 @@ function Channels() {
   );
 }
 
-export default Channels;
+export default AllChannels;

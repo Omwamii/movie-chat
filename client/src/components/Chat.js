@@ -3,6 +3,7 @@ import menuIcon from '../assets/images/menu.png';
 import MessageInput from './MessageInput';
 import Message  from './Message';
 import MyMessage from './MyMessage';
+import Reply from './Reply';
 
 function Chat() {
 
@@ -20,7 +21,7 @@ function Chat() {
                 </div>
             </div>
             <div className="chat-canvas">
-                {/* Messages go here */}
+                {/* Chat messages*/}
                 <Message />
                 <Message />
                 <Message />
@@ -29,6 +30,10 @@ function Chat() {
                 <Message />
                 <MyMessage />
 
+            </div>
+            <div className='reply-preview-section'>
+                {/* Show text being replied to in the chat in this section */}
+                <Reply />
             </div>
             <div className="chat-input">
                 <MessageInput />

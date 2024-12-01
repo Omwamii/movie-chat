@@ -24,7 +24,7 @@ export default function MovieList() {
     const [open, setOpen] = React.useState(false);
     const [selectedMovieCover, setSelectedMovieCover] = React.useState(null);
     const handleOpen = (event) => {
-        const movieImage = event.target.src;
+        const movieImage = event.target.parentElement.querySelector('img').src
         setSelectedMovieCover(movieImage);
         setOpen(true);
     }
@@ -71,10 +71,16 @@ export default function MovieList() {
 
                 <div className="movie-card" onClick={handleOpen}>
                     <img src={movieIcon} className="movie-card-cover" />
+                    <div className='overlay'>
+                        <p>Movie name</p>
+                    </div>
                 </div>
 
                 <div className="movie-card" onClick={handleOpen} >
                     <img src={movieIcon} className="movie-card-cover" />
+                    <div className='overlay'>
+                        <p>Movie name</p>
+                    </div>
                 </div> 
 
                 <div className="movie-card" onClick={handleOpen}>
@@ -91,6 +97,9 @@ export default function MovieList() {
 
                 <div className="movie-card" onClick={handleOpen}>
                     <img src={NopeMovieIcon} className="movie-card-cover" />
+                    <div className='overlay'>
+                        <p>Movie name</p>
+                    </div>
                 </div>
 
             </div>
