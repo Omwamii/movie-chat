@@ -41,6 +41,7 @@
 
 body {
   background-image: url('../images/hex-background.jpg');
+  font-family: "Kodchasan", sans-serif;
 }
 
 /* Scrollbar styles */
@@ -149,20 +150,29 @@ a:hover {
   border-radius: 5px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   z-index: 1000; /* Ensure it's above other elements */
-  padding: 10px;
+  /* padding: 10px; */
+  /* width: 80px;
+  height: 80px; */
   width: 80px;
-  height: 80px;
+}
+
+.dropdown-menu li {
+  margin: 7px auto;
+  /* border: 1px solid white; */
+  padding: 8px;
+  text-align: center;
 }
 
 .dropdown-menu ul {
   list-style: none;
   margin: 0;
   padding: 0;
+  /* border: 1px solid white; */
 }
 
 .dropdown-menu ul li:hover {
   cursor: pointer;
-  background-color: grey;
+  background-color: #212733;
 }
 
 .message-time p {
@@ -190,6 +200,10 @@ a:hover {
 
 .chat, .chat-group-info, .chat-canvas, .chat-input {
   background-color: #2E333D;
+}
+
+.chat-input {
+  margin-bottom: 0;
 }
 
 .chat {
@@ -379,6 +393,7 @@ a:hover {
 .message-reply-action {
   width: 32px;
   height: 32px;
+  user-select: none;
 }
 
 .message-reply-action:hover {
@@ -493,25 +508,44 @@ a:hover {
   background-color: #404038;
   border-radius: 7px;
   width: 80%;
-  /* margin-left: 50px; */
+  /* margin-left: 30px; */
+  margin: 0 auto;
   color: white;
   font-family: "Kodchasan", sans-serif;
   font-weight: 300;
   font-style: normal;
-  height: 85px;
+  min-height: 60px;
   padding: 10px;
+  display: none;
+  transition: display 0.6s ease;  
+  border-left: 7px solid #6B8AFD;
 }
 
 .reply-header {
   display: flex;
   /* border: 1px solid white; */
   justify-content: space-between;
-  padding: 5px;
+  margin-bottom: 3px;
+  /* padding: 5px; */
+  /* border: 1px solid white; */
 }
 
+.reply-body {
+  /* border: 1px solid white; */
+  padding: 0;
+}
+
+.reply-username {
+  color: #6B8AFD;
+  font-size: 15px;
+}
+
+.reply-body p {
+  padding: 0;
+}
 .cancel-icon {
-  width: 25px;
-  height: 25px;
+  width: 20px;
+  height: 20px;
   display: flex;
   justify-self: flex-end;
   /* border: 1px solid white; */
@@ -684,4 +718,8 @@ a:hover {
   cursor: pointer;
   box-shadow: 10px;
   transform: scale(1.03);
+}
+
+.reply-preview.show-reply-preview {
+  display: block;
 }
