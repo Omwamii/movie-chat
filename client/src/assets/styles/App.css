@@ -5,6 +5,7 @@
 body {
   background-image: url('../images/hex-background.jpg');
   font-family: "Kodchasan", sans-serif;
+  margin: 0;
 }
 
 /* Scrollbar styles */
@@ -182,7 +183,7 @@ a:hover {
 
 .chat-input {
   margin-bottom: 0;
-  /* font-size: 30px; */
+  font-size: 18px;
 }
 
 .emoji-picker {
@@ -191,11 +192,20 @@ a:hover {
 }
 
 .emoji-picker-div {
-  border: 1px solid white;
+  /* border: 1px solid white; */
+  display: flex;
+  justify-content: center;
 }
 
 .emoji-input-section {
-  /* position: fixed; */
+  position: fixed; /* Makes it fixed */
+  bottom: 5%;       /* Anchors it to the bottom */
+  left: 42%;         /* Anchors it to the left */
+  width: 100%;     /* Stretches it across the screen */
+  z-index: 10;     /* Ensures it stays above other elements */
+  /* box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1); Optional: Adds a shadow for distinction */
+  /* border: 1px solid white; */
+  width: 700px;
 }
 
 .chat {

@@ -14,15 +14,24 @@ function MessageInput() {
         setInputValue((prev) => prev + emoji.native); // Append emoji to input value
     };
 
+    const handleClickedOutside = () => {
+        // hide the picker on clicking outside
+    }
+
     return (
         <div className="emoji-input-section">
             <div className="emoji-picker-div">
                 {showPicker && (
                         <Picker
+                            perLine={20}
                             data={data}
                             onEmojiSelect={handleEmojiSelect}
+                            onClickOutside={handleClickedOutside}
                             theme="dark"
-                            className="emoji-picker"
+                            style={{
+                                width: "500px",
+                                border: "3px solid red"
+                            }}
                         />
                     )}
             </div>
