@@ -1,40 +1,3 @@
-/* font */
-.kodchasan-extralight {
-  font-family: "Kodchasan", sans-serif;
-  font-weight: 200;
-  font-style: normal;
-}
-
-.kodchasan-light {
-  font-family: "Kodchasan", sans-serif;
-  font-weight: 300;
-  font-style: normal;
-}
-
-.kodchasan-regular {
-  font-family: "Kodchasan", sans-serif;
-  font-weight: 400;
-  font-style: normal;
-}
-
-.kodchasan-medium {
-  font-family: "Kodchasan", sans-serif;
-  font-weight: 500;
-  font-style: normal;
-}
-
-.kodchasan-semibold {
-  font-family: "Kodchasan", sans-serif;
-  font-weight: 600;
-  font-style: normal;
-}
-
-.kodchasan-bold {
-  font-family: "Kodchasan", sans-serif;
-  font-weight: 700;
-  font-style: normal;
-}
-
 * {
   box-sizing: border-box;
 }
@@ -97,8 +60,8 @@ a:hover {
 }
 
 .message {
-  width: 500px;
-  min-height: 100px;
+  width: 400px; /* + Responsive */
+  min-height: 100px; /* + Responsive */
   border-radius: 8px;
   padding: 10px;
   margin-bottom: 10px;
@@ -109,35 +72,50 @@ a:hover {
   font-family: "Kodchasan", sans-serif;
   font-weight: 200;
   font-style: normal;
-  }
-
-.message-owner {
-  font-size: 20px;
   color: white;
-}
+  }
 
 .message-header {
   display: flex;
   justify-content: space-between;
   width: 100%;
   padding: 2px;
+  /* border: 1px solid white; */
+}
+
+.message-time-text {
+  font-family: "Kodchasan", sans-serif;
+  font-weight: 200;
+  font-style: normal;
 }
 
 .message-text {
-  font-size: 20px;
-  padding: 2px;
-  margin-bottom: 10px;
-  color: #ffff;
+  margin-top: 5px;
 }
 
 .message-time {
   display: flex;
   align-self: flex-end;
   color: white;
+  font-size: 13px;
 }
 
 .message-actions {
   position: relative; /* Required for positioning the dropdown menu */
+}
+
+.message-reply-body {
+  background-color: #373E4D;
+  border-radius: 7px;
+  width: 100%;
+  color: white;
+  font-family: "Kodchasan", sans-serif;
+  font-weight: 300;
+  font-style: normal;
+  height: 60px;
+  padding: 10px;
+  /* border-left: 7px solid #6B8AFD; */
+  border-left: 7px solid lime;
 }
 
 .dropdown-menu {
@@ -204,10 +182,24 @@ a:hover {
 
 .chat-input {
   margin-bottom: 0;
+  /* font-size: 30px; */
+}
+
+.emoji-picker {
+  width: 500px;
+  border: 1px solid yellow;
+}
+
+.emoji-picker-div {
+  border: 1px solid white;
+}
+
+.emoji-input-section {
+  /* position: fixed; */
 }
 
 .chat {
-  width: 800px;
+  width: 800px; /* + Responsive */
   height: 92vh;
   padding: 10px;
   overflow-y: scroll;
@@ -217,9 +209,12 @@ a:hover {
   background-color: #2E333D;
   display: flex;
   flex-direction: column;
-  width: 400px;
+  /* width: 300px; */
+  width: 85%;
   height: 80vh;
   overflow-y: scroll;
+  /* border: 1px solid white; */
+  margin: 0 auto;
 }
 
 .list-channel {
@@ -229,9 +224,10 @@ a:hover {
   flex-direction: row;
   /* justify-content: flex-start; */
   /* border: 1px solid white; */
-  width: 90%;
+  width: 100%;
   margin: 5px auto;
   color: white;
+  padding-left: 5px;
 }
 
 .list-channel:hover {
@@ -240,14 +236,14 @@ a:hover {
 }
 
 .list-channel-image {
-  flex-basis: 15%;
+  flex-basis: 10%;
   align-self: center;
 }
 
 .list-channel-text-info {
   display: flex;
   flex-direction: column;
-  flex-basis: 85%;
+  flex-basis: 90%;
   padding: 10px;
 }
 
@@ -277,7 +273,7 @@ a:hover {
   font-family: "Kodchasan", sans-serif;
   font-weight: 500;
   font-style: normal;
-  font-size: 18px;
+  font-size: 15px;
   /* display: flex;
   align-self: flex-end; */
 }
@@ -285,13 +281,15 @@ a:hover {
 
 
 .channel-movie-cover {
-  width: 80px;
-  height: 80px;
-  border-radius: 40px;
+  width: 60px;
+  height: 60px;
+  border-radius: 30px;
 }
 
 .nav {
   background-color: #2E333D;
+  /* border: 1px solid wheat; */
+  width: 400px !important; /* + Responsive */
 }
 
 .nav-channels {
@@ -307,7 +305,7 @@ a:hover {
 }
 
 .nav {
-  width: 400px;
+  width: 400px; /* + Responsive */
 }
 
 .nav-channels-single a {
@@ -339,13 +337,13 @@ a:hover {
 }
 
 .emoji-face {
-  width: 25px;
-  height: 25px;
+  width: 25px; /* + Responsive */
+  height: 25px; /* + Responsive */
 }
 
 .emoji-select {
-  width: 40px;
-  height: 40px;
+  width: 40px; /* + Responsive */
+  height: 40px; /* + Responsive */
   /* border: 1px solid white; */
   display: flex;
   justify-content: center;
@@ -382,8 +380,8 @@ a:hover {
 }
 
 .send-icon {
-  width: 25px;
-  height: 25px;
+  width: 25px; /* + Responsive */
+  height: 25px; /* + Responsive */
 }
 
 .send-icon:hover {
@@ -391,8 +389,8 @@ a:hover {
 }
 
 .message-reply-action {
-  width: 32px;
-  height: 32px;
+  width: 20px; /* + Responsive */
+  height: 20px; /* + Responsive */
   user-select: none;
 }
 
@@ -401,7 +399,7 @@ a:hover {
 }
 
 .group-name {
-  font-size: 25px;
+  font-size: 25px; /* + Responsive */
   color: white;
   /* border: 1px solid white; */
 }
@@ -414,7 +412,7 @@ a:hover {
 }
 
 .group-menu-icon {
-  width: 30px;
+  width: 30px; /* + Responsive */
   height: 30px;
   display: flex;
   justify-self: flex-end;
@@ -487,8 +485,8 @@ a:hover {
 }
 
 .list-channel-num-chats {
-  height: 20px;
-  height: 20px;
+  height: 20px; /* + Responsive */
+  height: 20px; /* + Responsive */
   border-radius: 10px;
   background-color: #6B8AFD;
   padding: 5px;
@@ -667,8 +665,8 @@ a:hover {
 
 
 .movie-card-cover {
-  width: 220px;
-  height: 220px;
+  width: 220px; /* + Responsive */
+  height: 220px; /* + Responsive */
   transition: opacity 0.3s ease;
 }
 
@@ -678,8 +676,8 @@ a:hover {
 }
 
 .modal-movie-cover {
-  width: 500px;
-  height: 500px;
+  width: 500px; /* + Responsive */
+  height: 500px; /* + Responsive */
 }
 
 .custom-modal {
@@ -706,8 +704,8 @@ a:hover {
 }
 
 .modal-movie-action button {
-  width: 150px;
-  height: 50px;
+  width: 150px; /* + Responsive */
+  height: 50px; /* + Responsive */
   border-radius: 25px;
   outline: none;
   border: none;

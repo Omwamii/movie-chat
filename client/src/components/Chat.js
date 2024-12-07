@@ -7,10 +7,12 @@ import MyMessage from './MyMessage';
 import Reply from './Reply';
 import dropDownIconDark from '../assets/images/down-arrow-dark.png';
 import cancelIcon from '../assets/images/close.png';
+import dropDownIconBlue from '../assets/images/down-arrow.png';
 
 function Chat() {
     const [menuVisible, setMenuVisible] = useState(false);
     const [messageReplyingTo, setMessageReplyingTo] = useState(null);
+    const messageHasReply = true;
   
     const toggleMenu = () => {
       setMenuVisible((prev) => !prev);
@@ -102,13 +104,80 @@ function Chat() {
                         <p>7:31 pm</p>
                     </div>
                 </div>
-                <Message />
-                <Message />
-                <Message />
-                <Message />
-                <Message />
-                <Message />
-                <MyMessage />
+
+                <div className="message not-my-message" id="123"> {/* Toggle btwn my text */}
+                    <div className="message-header">
+                        <div className="message-owner">John Does</div>
+                        <div className="message-actions">
+                        <img src={dropDownIconDark} alt="reply" className="message-reply-action" onClick={toggleMenu}/> {/* Toggle with blue */}
+                        {menuVisible && (
+                            <div className="dropdown-menu" onMouseLeave={closeMenu}>
+                            <ul>
+                                <li onClick={handleReplyClicked} id="reply-123">Reply</li>
+                                <li onClick={handleDeleteClicked} id='delete-123'>Delete</li>
+                            </ul>
+                            </div>
+                        )}
+                        </div>
+                    </div>
+                    <div className="message-reply-body">
+                        <div className="reply-header">
+                            <span className="reply-username">Name</span>
+                        </div>
+                        <div className="reply-body">
+                            <div className='reply-preview-text'>Text being replied to</div>
+                        </div>
+                    </div>
+                    <div className="message-text">
+                        Fusce a mattis metus. Aenean rhoncus nunc vitae imperdiet mollis
+                        Praesent mollis congue libero. Vestibulum pulvinar
+                    </div>
+                    <div className="message-time">
+                        <p>7:31 pm</p>
+                    </div>
+                </div>
+
+                {/* My message */}
+                <div className="message my-message"> {/* Toggle btwn my text */}
+                    <div className="message-header">
+                        <div className="message-owner">John Doe</div>
+                        <div className="message-actions">
+                        <img src={dropDownIconBlue} alt="reply" className="message-reply-action"/> {/* Toggle with blue */}
+                        </div>
+                    </div>
+                    <div className="message-reply-body">
+                        <div className="reply-header">
+                            <span className="reply-username">Name</span>
+                        </div>
+                        <div className="reply-body">
+                            <div className='reply-preview-text'>Text being replied to</div>
+                        </div>
+                    </div>
+                    <div className="message-text">
+                        Fusce a mattis metus. Aenean rhoncus nunc vitae imperdiet mollis.
+                        Praesent mollis congue libero. Vestibulum pulvinar
+                    </div>
+                    <div className="message-time">
+                        <p className="message-time-text">7:31 pm</p>
+                    </div>
+                </div>
+
+                <div className="message my-message"> {/* Toggle btwn my text */}
+                    <div className="message-header">
+                        <div className="message-owner">John Doe</div>
+                        <div className="message-actions">
+                        <img src={dropDownIconBlue} alt="reply" className="message-reply-action"/> {/* Toggle with blue */}
+                        </div>
+                    </div>
+                    <div className="message-text">
+                        Fusce a mattis metus. Aenean rhoncus nunc vitae imperdiet mollis.
+                        Praesent mollis congue libero. Vestibulum pulvinar
+                    </div>
+                    <div className="message-time">
+                        <p>7:31 pm</p>
+                    </div>
+                </div>
+                {/* <MyMessage /> */}
 
             </div>
             <div className='reply-preview-section'>
