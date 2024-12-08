@@ -62,7 +62,8 @@ a:hover {
 
 .message {
   width: 400px; /* + Responsive */
-  min-height: 100px; /* + Responsive */
+  /* height: 150px;  + Responsive */
+  /* min-height: 100px;  */
   border-radius: 8px;
   padding: 10px;
   margin-bottom: 10px;
@@ -74,6 +75,7 @@ a:hover {
   font-weight: 200;
   font-style: normal;
   color: white;
+  /* border: 1px solid white; */
   }
 
 .message-header {
@@ -197,22 +199,26 @@ a:hover {
   justify-content: center;
 }
 
+.drop-emoji-picker {
+  border: 1px solid white;
+  height: 25px;
+}
+
 .emoji-input-section {
-  position: fixed; /* Makes it fixed */
-  bottom: 5%;       /* Anchors it to the bottom */
-  left: 42%;         /* Anchors it to the left */
-  width: 100%;     /* Stretches it across the screen */
-  z-index: 10;     /* Ensures it stays above other elements */
-  /* box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1); Optional: Adds a shadow for distinction */
-  /* border: 1px solid white; */
+  position: absolute; 
+  bottom: 0.5%;
+  left: 5%;
+  width: 100%;
+  z-index: 10;
   width: 700px;
 }
 
 .chat {
   width: 800px; /* + Responsive */
-  height: 92vh;
+  height: 93vh;
   padding: 10px;
   overflow-y: scroll;
+  position: relative;
 }
 
 .list-channels {
@@ -448,7 +454,9 @@ a:hover {
 
 .chat-canvas {
   display: flex;
-  flex-direction: column; 
+  flex-direction: column;
+  overflow: scroll;
+  height: 85%;
 }
 
 .chat-canvas .not-my-message {

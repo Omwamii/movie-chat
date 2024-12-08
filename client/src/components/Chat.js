@@ -8,11 +8,17 @@ import Reply from './Reply';
 import dropDownIconDark from '../assets/images/down-arrow-dark.png';
 import cancelIcon from '../assets/images/close.png';
 import dropDownIconBlue from '../assets/images/down-arrow.png';
+import emoji from '../assets/images/smile.png';
+import sendIcon from '../assets/images/send.png';
+import Picker from "@emoji-mart/react";
+import data from "@emoji-mart/data";
 
 function Chat() {
     const [menuVisible, setMenuVisible] = useState(false);
     const [messageReplyingTo, setMessageReplyingTo] = useState(null);
-    const messageHasReply = true;
+    const [inputValue, setInputValue] = useState('');
+    const [showPicker, setShowPicker] = useState(false);
+     const messageHasReply = true;
   
     const toggleMenu = () => {
       setMenuVisible((prev) => !prev);
@@ -65,6 +71,22 @@ function Chat() {
       const messageId = replyId.split("-")[1];
       console.log(`Deleting message id: ${messageId}`);
     }
+
+    // Function to handle emoji selection
+    const handleEmojiSelect = (emoji) => {
+        setInputValue((prev) => prev + emoji.native); // Append emoji to input value
+    };
+
+    const handleDropPicker = () => {
+        setShowPicker(false);
+    }
+
+    const handleShowPicker = () => {
+        console.log(`Before ${showPicker}`);
+        setShowPicker(!showPicker);
+        console.log(`After ${!showPicker}`);
+    }
+
 
     return (
         <div className="chat">
@@ -137,6 +159,103 @@ function Chat() {
                     </div>
                 </div>
 
+                <div className="message not-my-message" id="123"> {/* Toggle btwn my text */}
+                    <div className="message-header">
+                        <div className="message-owner">John Does</div>
+                        <div className="message-actions">
+                        <img src={dropDownIconDark} alt="reply" className="message-reply-action" onClick={toggleMenu}/> {/* Toggle with blue */}
+                        {menuVisible && (
+                            <div className="dropdown-menu" onMouseLeave={closeMenu}>
+                            <ul>
+                                <li onClick={handleReplyClicked} id="reply-123">Reply</li>
+                                <li onClick={handleDeleteClicked} id='delete-123'>Delete</li>
+                            </ul>
+                            </div>
+                        )}
+                        </div>
+                    </div>
+                    <div className="message-reply-body">
+                        <div className="reply-header">
+                            <span className="reply-username">Name</span>
+                        </div>
+                        <div className="reply-body">
+                            <div className='reply-preview-text'>Text being replied to</div>
+                        </div>
+                    </div>
+                    <div className="message-text">
+                        Fusce a mattis metus. Aenean rhoncus nunc vitae imperdiet mollis
+                        Praesent mollis congue libero. Vestibulum pulvinar
+                    </div>
+                    <div className="message-time">
+                        <p>7:31 pm</p>
+                    </div>
+                </div>
+
+                <div className="message not-my-message" id="123"> {/* Toggle btwn my text */}
+                    <div className="message-header">
+                        <div className="message-owner">John Does</div>
+                        <div className="message-actions">
+                        <img src={dropDownIconDark} alt="reply" className="message-reply-action" onClick={toggleMenu}/> {/* Toggle with blue */}
+                        {menuVisible && (
+                            <div className="dropdown-menu" onMouseLeave={closeMenu}>
+                            <ul>
+                                <li onClick={handleReplyClicked} id="reply-123">Reply</li>
+                                <li onClick={handleDeleteClicked} id='delete-123'>Delete</li>
+                            </ul>
+                            </div>
+                        )}
+                        </div>
+                    </div>
+                    <div className="message-reply-body">
+                        <div className="reply-header">
+                            <span className="reply-username">Name</span>
+                        </div>
+                        <div className="reply-body">
+                            <div className='reply-preview-text'>Text being replied to</div>
+                        </div>
+                    </div>
+                    <div className="message-text">
+                        Fusce a mattis metus. Aenean rhoncus nunc vitae imperdiet mollis
+                        Praesent mollis congue libero. Vestibulum pulvinar
+                    </div>
+                    <div className="message-time">
+                        <p>7:31 pm</p>
+                    </div>
+                </div>
+
+                <div className="message not-my-message" id="123"> {/* Toggle btwn my text */}
+                    <div className="message-header">
+                        <div className="message-owner">John Does</div>
+                        <div className="message-actions">
+                        <img src={dropDownIconDark} alt="reply" className="message-reply-action" onClick={toggleMenu}/> {/* Toggle with blue */}
+                        {menuVisible && (
+                            <div className="dropdown-menu" onMouseLeave={closeMenu}>
+                            <ul>
+                                <li onClick={handleReplyClicked} id="reply-123">Reply</li>
+                                <li onClick={handleDeleteClicked} id='delete-123'>Delete</li>
+                            </ul>
+                            </div>
+                        )}
+                        </div>
+                    </div>
+                    <div className="message-reply-body">
+                        <div className="reply-header">
+                            <span className="reply-username">Name</span>
+                        </div>
+                        <div className="reply-body">
+                            <div className='reply-preview-text'>Text being replied to</div>
+                        </div>
+                    </div>
+                    <div className="message-text">
+                        Fusce a mattis metus. Aenean rhoncus nunc vitae imperdiet mollis
+                        Praesent mollis congue libero. Vestibulum pulvinar
+                    </div>
+                    <div className="message-time">
+                        <p>7:31 pm</p>
+                    </div>
+                </div>
+
+
                 {/* My message */}
                 <div className="message my-message"> {/* Toggle btwn my text */}
                     <div className="message-header">
@@ -180,26 +299,66 @@ function Chat() {
                 {/* <MyMessage /> */}
 
             </div>
-            <div className='reply-preview-section'>
-                {/* Show text being replied to in the chat in this section */}
-                {/* <Reply /> */}
-                <div className="reply-preview">
-                    <div className="reply-header">
-                        <span className="reply-username">Name</span>
-                        <span className="cancel-reply" onClick={handleCancelReplyPreview}>
-                            <img src={cancelIcon} alt="cancel" className='cancel-icon' />
-                        </span>
+
+            <div className="chat-input">
+                <div className="emoji-input-section">
+                    <div className="emoji-picker-div">
+                        {showPicker && (
+                                <Picker
+                                    perLine={20}
+                                    data={data}
+                                    onEmojiSelect={handleEmojiSelect}
+                                    onClickOutside={handleDropPicker}
+                                    theme="dark"
+                                    style={{
+                                        width: "500px",
+                                        border: "3px solid red"
+                                    }}
+                                />
+                            )}
                     </div>
-                    <div className="reply-body">
-                        <div className='reply-preview-text'>Text being replied to</div>
+
+                    <div className='reply-preview-section'>
+                        {/* Show text being replied to in the chat in this section */}
+                        {/* <Reply /> */}
+                        <div className="reply-preview">
+                            <div className="reply-header">
+                                <span className="reply-username">Name</span>
+                                <span className="cancel-reply" onClick={handleCancelReplyPreview}>
+                                    <img src={cancelIcon} alt="cancel" className='cancel-icon' />
+                                </span>
+                            </div>
+                            <div className="reply-body">
+                                <div className='reply-preview-text'>Text being replied to</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div className="message-input-section">
+                        {/* <span className="drop-emoji-picker" onClick={setShowPicker(false)}>
+                                <img src={cancelIcon} alt="cancel" className='cancel-icon' />
+                        </span> */}
+                        {showPicker && (
+                            <div className="drop-emoji-picker">
+                                <img src={cancelIcon} alt="cancel" className="cancel-icon" onClick={handleDropPicker}/>
+                            </div>
+                        )}
+                        <div className="emoji-select">
+                            <img src={emoji} alt="Emojis" className="emoji-face" onClick={handleShowPicker} />
+                        </div>
+                        <div className="chat-input-container">
+                            <input  className="chat-input" placeholder="what's up?" value={inputValue} onChange={(e) => setInputValue(e.target.value)}/>
+                        </div>
+                        <div className="send-section">
+                            <img src={sendIcon} alt="Send" className="send-icon" />
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div className="chat-input">
-                <MessageInput />
+                {/* <MessageInput /> */}
             </div>
         </div>
     )
+    // setShowPicker(!showPicker)
 }
 
 export default Chat;
