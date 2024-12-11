@@ -200,8 +200,23 @@ a:hover {
 }
 
 .drop-emoji-picker {
-  border: 1px solid white;
+  /* border: 1px solid white; */
+  /* height: 25px; */
+  height: 40px;
+  width: 20px;
+  /* height: 100%; */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.picker-cancel-icon {
+  width: 25px;
   height: 25px;
+}
+
+.picker-cancel-icon:hover {
+  cursor: pointer;
 }
 
 .emoji-input-section {
@@ -372,6 +387,7 @@ a:hover {
   justify-content: center;
   align-items: center;
   flex-basis: 10%;
+  /* border: 1px solid white; */
 }
 
 .chat-input-container {
@@ -523,7 +539,8 @@ a:hover {
 .reply-preview {
   background-color: #404038;
   border-radius: 7px;
-  width: 80%;
+  width: 100%;
+  /* border: 1px solid white; */
   /* margin-left: 30px; */
   margin: 0 auto;
   color: white;
@@ -739,3 +756,7 @@ a:hover {
 .reply-preview.show-reply-preview {
   display: block;
 }
+
+/* .content {
+  display: none;
+} */

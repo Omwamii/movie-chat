@@ -1,5 +1,5 @@
 // Displays the group chat messages
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import menuIcon from '../assets/images/menu.png';
 import MessageInput from './MessageInput';
 import Message  from './Message';
@@ -18,8 +18,8 @@ function Chat() {
     const [messageReplyingTo, setMessageReplyingTo] = useState(null);
     const [inputValue, setInputValue] = useState('');
     const [showPicker, setShowPicker] = useState(false);
-     const messageHasReply = true;
-  
+    const messageHasReply = true;
+
     const toggleMenu = () => {
       setMenuVisible((prev) => !prev);
     };
@@ -32,13 +32,14 @@ function Chat() {
       const messageElement = document.getElementById(messageId);
       const name = messageElement.querySelector('.message-owner').textContent;
       const text = messageElement.querySelector('.message-text').textContent;
-      console.log(`${name}: ${text}`);
+      //   console.log(`${name}: ${text}`);
       return {name, text};
     }
 
+
     const showReplyPreview = () => {
         if (!messageReplyingTo) return;
-        console.log('Showing preview');
+        // console.log('Showing preview');
         const previewElement = document.getElementsByClassName('reply-preview')[0];
         const replyUser = previewElement.getElementsByClassName('reply-username')[0];
         const replyText = previewElement.getElementsByClassName('reply-preview-text')[0];
@@ -60,8 +61,8 @@ function Chat() {
     const handleReplyClicked = (event) => {
       const replyId = event.target.id;
       const messageId = replyId.split("-")[1];
-      console.log(`Replying to message id: ${messageId}`);
-      console.log(getMessageDetails(messageId));
+        //   console.log(`Replying to message id: ${messageId}`);
+        //   console.log(getMessageDetails(messageId));
       setMessageReplyingTo(messageId);
       showReplyPreview();
     }
@@ -77,16 +78,13 @@ function Chat() {
         setInputValue((prev) => prev + emoji.native); // Append emoji to input value
     };
 
-    const handleDropPicker = () => {
+    // const handleDropPicker = () => {
+    //     setShowPicker(false);
+    // }
+
+    const dropEmojiPicker = () => {
         setShowPicker(false);
     }
-
-    const handleShowPicker = () => {
-        console.log(`Before ${showPicker}`);
-        setShowPicker(!showPicker);
-        console.log(`After ${!showPicker}`);
-    }
-
 
     return (
         <div className="chat">
@@ -308,7 +306,7 @@ function Chat() {
                                     perLine={20}
                                     data={data}
                                     onEmojiSelect={handleEmojiSelect}
-                                    onClickOutside={handleDropPicker}
+                                    // onClickOutside={handleClickOutside}
                                     theme="dark"
                                     style={{
                                         width: "500px",
@@ -335,24 +333,25 @@ function Chat() {
                     </div>
                     
                     <div className="message-input-section">
-                        {/* <span className="drop-emoji-picker" onClick={setShowPicker(false)}>
-                                <img src={cancelIcon} alt="cancel" className='cancel-icon' />
-                        </span> */}
                         {showPicker && (
                             <div className="drop-emoji-picker">
-                                <img src={cancelIcon} alt="cancel" className="cancel-icon" onClick={handleDropPicker}/>
+                                <img src={cancelIcon} alt="cancel" className="picker-cancel-icon" onClick={dropEmojiPicker}/>
                             </div>
                         )}
+
                         <div className="emoji-select">
-                            <img src={emoji} alt="Emojis" className="emoji-face" onClick={handleShowPicker} />
+                            <img src={emoji} alt="Emojis" className="emoji-face" onClick={() => setShowPicker(!showPicker)} />
                         </div>
+
                         <div className="chat-input-container">
                             <input  className="chat-input" placeholder="what's up?" value={inputValue} onChange={(e) => setInputValue(e.target.value)}/>
                         </div>
+
                         <div className="send-section">
                             <img src={sendIcon} alt="Send" className="send-icon" />
                         </div>
                     </div>
+                    
                 </div>
                 {/* <MessageInput /> */}
             </div>

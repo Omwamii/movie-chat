@@ -16,6 +16,8 @@ function Nav() {
     const [showMovieCategories, setShowMovieCategories] = useState(false);
     const [activeNavLink, setActiveNavLink] = useState(null);
     const linkRef = useRef(null);
+    const navElement = document.getElementsByClassName('nav')[0];
+    const contentElement = document.getElementsByClassName('content')[0];
 
     useEffect(() => {
       if (linkRef.current) {
@@ -26,20 +28,16 @@ function Nav() {
     }, []);
 
     function handleAllChannelsClicked(event) {
-        console.log('All clicked');
+        
+      showContent();
+
         if (activeNavLink) {
-            console.log(`Then: ${activeNavLink}`)
             activeNavLink.classList.remove('active');
             event.target.classList.add('active');
             setActiveNavLink(event.target);
-            console.log(`Now: ${activeNavLink}`);
-            console.log(event.target)
         } else {
-            console.log(event.target)
-            console.log(event.target.classList)
             event.target.classList.add('active');
             setActiveNavLink(event.target);
-            console.log(`Now: ${activeNavLink}`);
         }
 
         if (showMyChannels) {
@@ -51,19 +49,17 @@ function Nav() {
     }
 
     function handleMyChannelsClicked(event) {
-        console.log('My clicked');
+
+      showContent();
+
         if (activeNavLink) {
-            console.log(`Then: ${activeNavLink}`)
             activeNavLink.classList.remove('active');
             event.target.classList.add('active');
             setActiveNavLink(event.target);
-            console.log(`Now: ${activeNavLink}`);
         } else {
             event.target.classList.add('active');
             setActiveNavLink(event.target);
-            console.log(`Now: ${activeNavLink}`);
         }
-
 
         if (showAllChannels) {
             setShowAllChannels(false)
@@ -74,17 +70,16 @@ function Nav() {
     }
 
     function handleMovieCategoriesClicked(event) {
-        console.log('Movies clicked');
+        
+      showContent()
+
         if (activeNavLink) {
-            console.log(`Then: ${activeNavLink}`)
             activeNavLink.classList.remove('active');
             event.target.classList.add('active');
             setActiveNavLink(event.target);
-            console.log(`Now: ${activeNavLink}`);
         } else {
             event.target.classList.add('active');
             setActiveNavLink(event.target);
-            console.log(`Now: ${activeNavLink}`);
         }
 
 
@@ -96,9 +91,25 @@ function Nav() {
         setShowMovieCategories(true);
     }
 
+    function showContent() {
+      // for responsive nav on smaller screens, switch between nav and content views
+      if (navElement) {
+        navElement.classList.remove('active');
+      }
+
+      if (contentElement) {
+        contentElement.classList.add('active')
+      }
+    }
+
+    function hideContent() {
+      contentElement.classList.remove('active');
+      navElement.classList.add('active');
+    }
+
     return (
       <div className='container'>
-        <div className="nav">
+        <div className="nav active">
           <div className="search-channels">
             <Search />
           </div>
@@ -118,8 +129,10 @@ function Nav() {
           {showAllChannels && <AllChannels />}
           {showMovieCategories && <MovieCategories />}
         </div>
-        {showMovieCategories && <MovieList />}
-        {(showMyChannels || showAllChannels) && <Chat />}
+        <div className="content">
+          {showMovieCategories && <MovieList />}
+          {(showMyChannels || showAllChannels) && <Chat />}
+        </div>
       </div>
     );
 }
