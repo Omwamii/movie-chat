@@ -1,14 +1,16 @@
 import logo from './assets/images/logo.svg';
 import './assets/styles/App.css';
-import MyChannels from './components/MyChannels';
-import Chat from './components/Chat';
+import './assets/styles/login.css';
 import Nav from './components/Nav';
-import MovieList from './components/MovieList';
+import Login from './components/Login';
+import Signup from './components/SIgnup';
 
 function App() {
   return (
     <div>
-       <Nav />
+        <Login />
+        {/* <Signup /> */}
+       {/* <Nav /> */}
         {/* <Chat /> */}
         {/* <MovieList /> */}
     </div>
