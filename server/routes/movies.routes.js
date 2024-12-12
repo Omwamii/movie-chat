@@ -3,10 +3,11 @@ import { getMovieGenres, getMoviesByGenre, getTrendingMovies, searchMoviesByGenr
 
 const router = express.Router();
 
-router.get("/:id", getMoviesByGenre)
 router.get("/genres", getMovieGenres)
-router.post("/search", searchMoviesByGenre)
 router.get("/trending", getTrendingMovies)
+router.get("/:id", getMoviesByGenre) // !!
+
+router.post("/search", searchMoviesByGenre)
 
 // router.post("/send/:id", guardRoute, sendMessage)
 
