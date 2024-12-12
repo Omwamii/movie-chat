@@ -3,14 +3,14 @@ import './assets/styles/App.css';
 import './assets/styles/login.css';
 import Nav from './components/Nav';
 import Login from './components/Login';
-import Signup from './components/SIgnup';
+import Signup from './components/Signup';
 
 function App() {
   return (
     <div>
-        <Login />
+        {/* <Login /> */}
         {/* <Signup /> */}
-       {/* <Nav /> */}
+       <Nav />
         {/* <Chat /> */}
         {/* <MovieList /> */}
     </div>

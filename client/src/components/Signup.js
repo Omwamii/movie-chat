@@ -1,10 +1,11 @@
 import React, { useState } from "react";
 
 export default function Signup() {
+
     const [formData, setFormData] = useState({
         username: "",
         password: "",
-        confirmPassword: "",
+        confirmation: "",
     });
 
     const handleChange = (e) => {
@@ -19,17 +20,28 @@ export default function Signup() {
         e.preventDefault();
         
         // Check if passwords match
-        if (formData.password !== formData.confirmPassword) {
+        if (formData.password !== formData.confirmation) {
             alert("Passwords do not match!");
             return;
         }
 
         // Handle signup logic here
-        console.log("Signup details:", {
-            username: formData.username,
-            password: formData.password,
-        });
-    };
+        console.log("Signup details:", formData);
+
+        signupUser();
+    }
+
+        const signupUser = () => {
+            fetch('http://127.0.0.1:5000/api/auth/signup', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify(formData)
+            })
+            .then((res) => res.json())
+            .then((data) => {
+                console.log(data);
+            });
+        }
 
     return (
         <div>
@@ -39,10 +51,11 @@ export default function Signup() {
                 <label htmlFor="username">Username</label>
                 <input
                     type="text"
-                    placeholder="Enter Username"
+                    placeholder="Pick a cool name 😎"
                     id="username"
                     value={formData.username}
                     onChange={handleChange}
+                    minLength={4}
                 />
 
                 <label htmlFor="password">Password</label>
@@ -52,15 +65,17 @@ export default function Signup() {
                     id="password"
                     value={formData.password}
                     onChange={handleChange}
+                    minLength={6}
                 />
 
-                <label htmlFor="confirmPassword">Confirm Password</label>
+                <label htmlFor="confirmation">Confirm Password</label>
                 <input
                     type="password"
                     placeholder="Confirm Password"
-                    id="confirmPassword"
-                    value={formData.confirmPassword}
+                    id="confirmation"
+                    value={formData.confirmation}
                     onChange={handleChange}
+                    minLength={6}
                 />
 
                 <button type="submit">Sign Up</button>

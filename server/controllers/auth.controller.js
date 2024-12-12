@@ -5,11 +5,14 @@ import generateToken from '../utils/token.util.js';
 export const signup = async (req, res) => {
     // signup user
     try {
+
         const {username, password, confirmation} = req.body;
 
-        if (password !== confirmation) {
-            return res.status(400).json({error: "Passwords do not match"})
-        }
+        console.log({
+            username,
+            password,
+            confirmation
+        })
 
         const user = await User.findOne({
             username
@@ -23,7 +26,7 @@ export const signup = async (req, res) => {
         const salt = await bcrypt.genSalt(10);
         const hashedPassword = await bcrypt.hash(password, salt);
 
-        const newUser = await User({
+        const newUser = User({
             username,
             password: hashedPassword,
         })
@@ -32,10 +35,7 @@ export const signup = async (req, res) => {
             generateToken(newUser._id, res)
             await newUser.save();
 
-            return res.status(201).json({
-                _id: newUser._id,
-                username: newUser.username,
-            })
+            return res.status(201).json(newUser)
         } else {
             res.status(400).json({error: 'Invalid user data'})
         }
@@ -68,7 +68,7 @@ export const login = async (req, res) => {
         })
 
     } catch (error) {
-        console.log("error in login controller");
+        console.log("error in login controller" + error.message);
         res.status(500).json({error: "Server error"});
     }
 }

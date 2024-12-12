@@ -91,6 +91,27 @@ function Nav() {
         setShowMovieCategories(true);
     }
 
+    function handlesSeriesCategoriesClicked(event) {
+      showContent()
+
+        if (activeNavLink) {
+            activeNavLink.classList.remove('active');
+            event.target.classList.add('active');
+            setActiveNavLink(event.target);
+        } else {
+            event.target.classList.add('active');
+            setActiveNavLink(event.target);
+        }
+
+
+        if (showMyChannels) {
+            setShowMyChannels(false)
+        } else if (showAllChannels) {
+            setShowAllChannels(false);
+        }
+        setShowMovieCategories(true);
+    }
+
     function showContent() {
       // for responsive nav on smaller screens, switch between nav and content views
       if (navElement) {
@@ -121,7 +142,10 @@ function Nav() {
               <a onClick={handleAllChannelsClicked} className='channels-navlink'>All chats</a>
             </div>
             <div className="nav-channels-single">
-              <a onClick={handleMovieCategoriesClicked} className='channels-navlink'>Categories</a>
+              <a onClick={handleMovieCategoriesClicked} className='channels-navlink'>Movies</a>
+            </div>
+            <div className="nav-channels-single">
+              <a onClick={handlesSeriesCategoriesClicked} className='channels-navlink'>Series</a>
             </div>
           </div>
           {/* place channels or movie categories here based on navigation link visited */}
