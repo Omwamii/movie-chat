@@ -7,6 +7,6 @@ export function filterByGenre(targetGenreId, seriesList) {
         }
         return false;
     });
-    
+
     return filteredSeries;
 }

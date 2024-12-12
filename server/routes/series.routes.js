@@ -1,8 +1,9 @@
 import express from "express";
-import { getSeriesGenres, getTrendingSeries, searchSeriesByGenre } from "../controllers/series.controller.js";
+import { getSeriesByGenre, getSeriesGenres, getTrendingSeries, searchSeriesByGenre } from "../controllers/series.controller.js";
 
 const router = express.Router();
 
+router.get("/:id", getSeriesByGenre)
 router.get("/genres", getSeriesGenres)
 router.post("/search", searchSeriesByGenre)
 router.get("/trending", getTrendingSeries)

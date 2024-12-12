@@ -22,10 +22,31 @@ export const getMovieGenres = async (req, res) => {
       }
 }
 
+export const getMoviesByGenre = async (req, res) => {
+    const API_KEY = process.env.TMDB_API_KEY;
+    const { id: genreId } = req.params;
+    const IMAGE_BASE_URL = "https://image.tmdb.org/t/p/original"
+
+    try {
+        const response = await axios.get(`https://api.themoviedb.org/3/movie/popular?api_key=${API_KEY}`);
+        // console.log(response.data);
+
+        // console.log('filtered by genre' + genreId);
+        const filteredMovies = filterByGenre(Number(genreId), response.data.results)
+        // console.log(filteredMovies);
+
+        res.json(filteredMovies);
+    } catch (error) {
+        console.error('Error fetching movies:', error.message);
+        res.status(500).json({ error: 'Failed to fetch movies' });
+    }
+}
+
 export const searchMoviesByGenre = async (req, res) => {
-    const API_KEY = process.env.TMDB_API_KEY
-    const API_TOKEN = process.env.TMDB_READ_ACCESS_TOKEN;
     const { query, genre } = req.body;
+    const API_KEY = process.env.TMDB_API_KEY;
+    const API_TOKEN = process.env.TMDB_READ_ACCESS_TOKEN;
+    const IMAGE_BASE_URL = "https://image.tmdb.org/t/p/original"
 
     console.log(req.body);
 
@@ -56,9 +77,10 @@ export const searchMoviesByGenre = async (req, res) => {
 }
 
 export const getTrendingMovies = async (req, res) => {
-    const API_KEY = process.env.TMDB_API_KEY
+    const API_KEY = process.env.TMDB_API_KEY;
     const media_type = 'movie'; // get trending movies only
     const time_window = 'week'; // series trending in the current week
+    const IMAGE_BASE_URL = "https://image.tmdb.org/t/p/original"
 
     try {
         const response = await axios.get(`https://api.themoviedb.org/3/trending/${media_type}/${time_window}`, {
