@@ -487,11 +487,14 @@ a:hover {
 
 .movie-categories {
   background-color: #2E333D;
+  /* background-color: white; */
   width: 100%;
+  height: inherit !important;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  overflow: scroll;
 }
 
 .movie-category {

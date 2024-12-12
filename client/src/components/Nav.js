@@ -6,6 +6,7 @@ import Search from "./Search";
 import MyChannels from "./MyChannels";
 import AllChannels from './AllChannels';
 import MovieCategories from "./MovieCategories.js";
+import SeriesCategories from "./SeriesCategories.js"
 import MovieList from './MovieList';
 import Chat from './Chat';
 
@@ -14,8 +15,10 @@ function Nav() {
     const [showMyChannels, setShowMyChannels] = useState(true);
     const [showAllChannels, setShowAllChannels] = useState(false);
     const [showMovieCategories, setShowMovieCategories] = useState(false);
+    const [showSeriesCategories, setShowSeriesCategories] = useState(false);
     const [activeNavLink, setActiveNavLink] = useState(null);
     const linkRef = useRef(null);
+
     const navElement = document.getElementsByClassName('nav')[0];
     const contentElement = document.getElementsByClassName('content')[0];
 
@@ -44,6 +47,8 @@ function Nav() {
             setShowMyChannels(false)
         } else if (showMovieCategories) {
             setShowMovieCategories(false);
+        } else if (showSeriesCategories) {
+          setShowSeriesCategories(false);
         }
         setShowAllChannels(true);
     }
@@ -65,6 +70,8 @@ function Nav() {
             setShowAllChannels(false)
         } else if (showMovieCategories) {
             setShowMovieCategories(false);
+        } else if (showSeriesCategories) {
+          setShowSeriesCategories(false);
         }
         setShowMyChannels(true);
     }
@@ -87,6 +94,8 @@ function Nav() {
             setShowMyChannels(false)
         } else if (showAllChannels) {
             setShowAllChannels(false);
+        } else if (showSeriesCategories) {
+          setShowSeriesCategories(false);
         }
         setShowMovieCategories(true);
     }
@@ -108,8 +117,10 @@ function Nav() {
             setShowMyChannels(false)
         } else if (showAllChannels) {
             setShowAllChannels(false);
+        } else if (showMovieCategories) {
+          setShowMovieCategories(false);
         }
-        setShowMovieCategories(true);
+        setShowSeriesCategories(true);
     }
 
     function showContent() {
@@ -152,6 +163,7 @@ function Nav() {
           {showMyChannels && <MyChannels />}
           {showAllChannels && <AllChannels />}
           {showMovieCategories && <MovieCategories />}
+          {showSeriesCategories && <SeriesCategories />}
         </div>
         <div className="content">
           {showMovieCategories && <MovieList />}

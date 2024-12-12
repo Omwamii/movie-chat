@@ -1,29 +1,29 @@
 import { useState, useEffect } from "react";
-// List of movie categories to choose from
+// List of series categories to choose from
 
-function MovieCategories () {
-    const [movieGenres, setMovieGenres] = useState([]);
+function SeriesCategories () {
+    const [seriesGenres, setSeriesGenres] = useState([]);
 
     useEffect(() => {
-        fetchMovieGenres();
+        fetchSeriesGenres();
       }, []);
 
-    const fetchMovieGenres = () => {
-        fetch('http://127.0.0.1:5000/api/movies/genres', {
+    const fetchSeriesGenres = () => {
+        fetch('http://127.0.0.1:5000/api/series/genres', {
             method: 'GET',
             headers: {'Content-Type': 'application/json'},
         })
         .then((res) => res.json())
         .then((data) => {
             console.log(data);
-            setMovieGenres(data);
+            setSeriesGenres(data);
         });
     }
 
     return (
         <div className="movie-categories">
-            {/* movie genres */}
-            {movieGenres && (movieGenres.map((genre) => (
+            {/* Series genres */}
+            {seriesGenres && (seriesGenres.map((genre) => (
                 <div className="movie-category" id={genre.id} key={genre.id}>
                     <p>{genre.name}</p>
                 </div>
@@ -32,4 +32,4 @@ function MovieCategories () {
     )
 }
 
-export default MovieCategories;
+export default SeriesCategories;
