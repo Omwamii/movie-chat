@@ -29,8 +29,7 @@ export const searchMoviesByGenre = async (req, res) => {
     const { query, genre } = req.body;
     const API_KEY = process.env.TMDB_API_KEY;
     const API_TOKEN = process.env.TMDB_READ_ACCESS_TOKEN;
-    const IMAGE_BASE_URL = "https://image.tmdb.org/t/p/original"
-
+   
     // console.log(req.body);
 
     console.log("Searching movie");
@@ -63,8 +62,7 @@ export const getTrendingMovies = async (req, res) => {
     const API_KEY = process.env.TMDB_API_KEY;
     const media_type = 'movie'; // get trending movies only
     const time_window = 'week'; // series trending in the current week
-    const IMAGE_BASE_URL = "https://image.tmdb.org/t/p/original"
-
+   
     // console.log(req);
     console.log("getting trending movies");
 
@@ -75,7 +73,7 @@ export const getTrendingMovies = async (req, res) => {
         
         console.log(response.data)
         
-        res.json(response.data);
+        res.json(response.data.results);
     } catch (error) {
         console.error('Error fetching trending data:', error.message);
         res.status(500).json({ error: 'Failed to fetch trending data' });
@@ -85,7 +83,6 @@ export const getTrendingMovies = async (req, res) => {
 export const getMoviesByGenre = async (req, res) => {
     const API_KEY = process.env.TMDB_API_KEY;
     const { id: genreId } = req.params;
-    const IMAGE_BASE_URL = "https://image.tmdb.org/t/p/original"
 
     console.log("inside getMovieByGenre");
 

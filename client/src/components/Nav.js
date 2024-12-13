@@ -9,6 +9,7 @@ import MovieCategories from "./MovieCategories.js";
 import SeriesCategories from "./SeriesCategories.js"
 import MovieList from './MovieList';
 import Chat from './Chat';
+import SeriesList from './SeriesList';
 
 function Nav() {
     const [value, setValue] = useState('');
@@ -16,8 +17,12 @@ function Nav() {
     const [showAllChannels, setShowAllChannels] = useState(false);
     const [showMovieCategories, setShowMovieCategories] = useState(false);
     const [showSeriesCategories, setShowSeriesCategories] = useState(false);
+    const [series, setSeries] = useState([]);
+    const [movies, setMovies] = useState([]);
     const [activeNavLink, setActiveNavLink] = useState(null);
     const linkRef = useRef(null);
+    const [seriesGenres, setSeriesGenres] = useState([]);
+    const [moviesGenres, setMoviesGenres] = useState([]);
 
     const navElement = document.getElementsByClassName('nav')[0];
     const contentElement = document.getElementsByClassName('content')[0];
@@ -28,6 +33,11 @@ function Nav() {
         linkRef.current.click();
         console.log('triggering first nav click');
       }
+    }, []);
+
+    useEffect(() => {
+      fetchSeriesGenres();
+      fetchMoviesGenres();
     }, []);
 
     function handleAllChannelsClicked(event) {
@@ -139,6 +149,93 @@ function Nav() {
       navElement.classList.add('active');
     }
 
+    // SeriesCategories
+    // const [seriesGenres, setSeriesGenres] = useState([]);
+
+
+
+    const fetchSeriesGenres = () => {
+        fetch('http://127.0.0.1:5000/api/series/genres', {
+            method: 'GET',
+            headers: {'Content-Type': 'application/json'},
+        })
+        .then((res) => res.json())
+        .then((data) => {
+            console.log(data);
+            setSeriesGenres(data);
+        });
+    }
+
+    const fetchSeriesByGenre = (event) => {
+        console.log(event.target);
+        const genreId = event.target.id;
+        console.log(genreId);
+
+        fetch(`http://127.0.0.1:5000/api/series/${genreId}`, {
+          method: 'GET',
+          headers: {'Content-Type': 'application/json'},
+        })
+        .then((res) => res.json())
+        .then((data) => {
+          console.log(`Fetched series:`, data);
+          setSeries(data);
+        })
+    }
+
+    const fetchTrendingSeries = () => {
+      fetch(`http://127.0.0.1:5000/api/series/trending`, {
+        method: 'GET',
+        headers: {'Content-Type': 'application/json'},
+      })
+      .then((res) => res.json())
+      .then((data) => {
+        console.log(`Fetched Trending series:`, data);
+        setSeries(data);
+      })
+  }
+
+    const fetchMoviesGenres = () => {
+      fetch('http://127.0.0.1:5000/api/movies/genres', {
+          method: 'GET',
+          headers: {'Content-Type': 'application/json'},
+      })
+      .then((res) => res.json())
+      .then((data) => {
+          console.log(data);
+          setMoviesGenres(data);
+      });
+  }
+
+  const fetchMoviesByGenre = (event) => {
+      console.log(event.target);
+      const genreId = event.target.id;
+      console.log(genreId);
+
+      fetch(`http://127.0.0.1:5000/api/movies/${genreId}`, {
+        method: 'GET',
+        headers: {'Content-Type': 'application/json'},
+      })
+      .then((res) => res.json())
+      .then((data) => {
+        console.log(`Fetched movies:`, data);
+        setMovies(data);
+      })
+  }
+
+  const fetchTrendingMovies = () => {
+    fetch(`http://127.0.0.1:5000/api/movies/trending`, {
+      method: 'GET',
+      headers: {'Content-Type': 'application/json'},
+    })
+    .then((res) => res.json())
+    .then((data) => {
+      console.log(`Fetched Trending series:`, data);
+      setMovies(data);
+    })
+  }
+
+    //
+
     return (
       <div className='container'>
         <div className="nav active">
@@ -162,11 +259,39 @@ function Nav() {
           {/* place channels or movie categories here based on navigation link visited */}
           {showMyChannels && <MyChannels />}
           {showAllChannels && <AllChannels />}
-          {showMovieCategories && <MovieCategories />}
-          {showSeriesCategories && <SeriesCategories />}
+          {showMovieCategories && (
+            <div className="movie-categories">
+                {/* movies genres */}
+                <div className="movie-category" onClick={fetchTrendingMovies}>
+                      Trending🔥
+                </div>
+                {moviesGenres && (moviesGenres.map((genre) => (
+                    <div className="movie-category" id={genre.id} key={genre.id} onClick={fetchMoviesByGenre}>
+                        {genre.name}
+                    </div>
+                )))}
+            </div> 
+          )}
+
+          {/* {showSeriesCategories && <SeriesCategories />} */}
+          {showSeriesCategories && (
+            <div className="movie-categories">
+                {/* Series genres */}
+                <div className="movie-category" onClick={fetchTrendingSeries}>
+                      Trending🔥
+                </div>
+                {seriesGenres && (seriesGenres.map((genre) => (
+                    <div className="movie-category" id={genre.id} key={genre.id} onClick={fetchSeriesByGenre}>
+                        {genre.name}
+                    </div>
+                )))}
+            </div>
+          )}
+
         </div>
         <div className="content">
-          {showMovieCategories && <MovieList />}
+          {showMovieCategories && <MovieList movies={movies}/>}
+          {showSeriesCategories && <SeriesList series={series} />}
           {(showMyChannels || showAllChannels) && <Chat />}
         </div>
       </div>

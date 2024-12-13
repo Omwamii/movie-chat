@@ -20,11 +20,15 @@ function SeriesCategories () {
         });
     }
 
+    const fetchSeriesByGenre = (event) => {
+        console.log(event.target);
+    }
+
     return (
         <div className="movie-categories">
             {/* Series genres */}
             {seriesGenres && (seriesGenres.map((genre) => (
-                <div className="movie-category" id={genre.id} key={genre.id}>
+                <div className="movie-category" id={genre.id} key={genre.id} onClick={fetchSeriesByGenre}>
                     <p>{genre.name}</p>
                 </div>
             )))}

@@ -36,6 +36,8 @@ body {
   justify-content: center;
   margin-top: 30px;
   gap: 12px;
+  /* border: 1px solid white; */
+  /* height: 90vh; */
 }
 
 a:hover {
@@ -487,14 +489,15 @@ a:hover {
 
 .movie-categories {
   background-color: #2E333D;
-  /* background-color: white; */
   width: 100%;
-  height: inherit !important;
+  height: 75vh !important;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   overflow: scroll;
+  border: 1px solid white;
+  padding-top: 1000px;
 }
 
 .movie-category {
@@ -502,14 +505,14 @@ a:hover {
   color: #ffff;
   font-size: 25px;
   border-radius: 7px;
-  /* border: 1px solid white; */
   width: 90%;
   margin: 5px auto;
-  height: 80px;
+  height: 80px !important;
   display: flex;
   justify-content: center;
   align-items: center;
   background-color: #212733;
+  flex-shrink: 0;
 }
 
 .movie-category:hover {
@@ -705,6 +708,7 @@ a:hover {
 .movie-card-cover {
   width: 220px; /* + Responsive */
   height: 220px; /* + Responsive */
+  object-fit: cover;
   transition: opacity 0.3s ease;
 }
 

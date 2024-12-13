@@ -68,7 +68,7 @@ export const getTrendingSeries = async (req, res) => {
         
         console.log(response.data)
 
-        res.json(response.data);
+        res.json(response.data.results);
     } catch (error) {
         console.error('Error fetching trending data:', error.message);
         res.status(500).json({ error: 'Failed to fetch trending data' });
@@ -81,14 +81,15 @@ export const getSeriesByGenre = async (req, res) => {
     const API_KEY = process.env.TMDB_API_KEY;
 
     try {
-        const response = await axios.get(`https://api.themoviedb.org/3/movie/popular?api_key=${API_KEY}`);
+        const response = await axios.get(`https://api.themoviedb.org/3/tv/popular?api_key=${API_KEY}`);
         // console.log(response.data);
 
         // console.log('filtered by genre' + genreId);
-        const filteredMovies = filterByGenre(Number(genreId), response.data.results);
+        const filteredSeries = filterByGenre(Number(genreId), response.data.results);
         // console.log(filteredMovies);
 
-        res.json(filteredMovies);
+        console.log()
+        res.json(filteredSeries);
     } catch (error) {
         console.error('Error fetching movies:', error.message);
         res.status(500).json({ error: 'Failed to fetch movies' });
