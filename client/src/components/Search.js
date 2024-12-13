@@ -1,11 +1,6 @@
 // search component
 
-
-function Search (type) {
-    // type - purpose of searchbar (either in channels or movie categories )
-    if (!type) {
-        type = 'channels'
-    }
+function Search (props) {
 
     return (
             <div className="group">
@@ -20,7 +15,7 @@ function Search (type) {
                     id="query"
                     className="input"
                     type="search"
-                    placeholder={`Search channels`}
+                    placeholder={`Search ${props.placeholder ? props.placeholder : 'channels'}`}
                     name="searchbar"
                 />
             </div>

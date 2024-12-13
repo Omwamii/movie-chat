@@ -23,6 +23,7 @@ function Nav() {
     const linkRef = useRef(null);
     const [seriesGenres, setSeriesGenres] = useState([]);
     const [moviesGenres, setMoviesGenres] = useState([]);
+    // const [placeholder, setPlaceholder] = useState("Trending🔥"); // placeholder for <Search /> component, to change with genres
 
     const navElement = document.getElementsByClassName('nav')[0];
     const contentElement = document.getElementsByClassName('content')[0];
@@ -87,7 +88,12 @@ function Nav() {
     }
 
     function handleMovieCategoriesClicked(event) {
-        
+      // const link = document.getElementById('trending-movies-link');
+      // console.log(link);
+      // link.click();
+
+      fetchTrendingMovies();
+
       showContent()
 
         if (activeNavLink) {
@@ -111,6 +117,11 @@ function Nav() {
     }
 
     function handlesSeriesCategoriesClicked(event) {
+      // const link = document.getElementById('trending-series-link');
+      // console.log(link)
+      // link.click();
+      fetchTrendingSeries();
+
       showContent()
 
         if (activeNavLink) {
@@ -152,8 +163,6 @@ function Nav() {
     // SeriesCategories
     // const [seriesGenres, setSeriesGenres] = useState([]);
 
-
-
     const fetchSeriesGenres = () => {
         fetch('http://127.0.0.1:5000/api/series/genres', {
             method: 'GET',
@@ -162,14 +171,16 @@ function Nav() {
         .then((res) => res.json())
         .then((data) => {
             console.log(data);
-            setSeriesGenres(data);
+            if (!data.error) {
+              setSeriesGenres(data);
+            }
         });
     }
 
     const fetchSeriesByGenre = (event) => {
-        console.log(event.target);
         const genreId = event.target.id;
-        console.log(genreId);
+        console.log(event.target.textContent);
+        // setPlaceholder(event.target.textContent);
 
         fetch(`http://127.0.0.1:5000/api/series/${genreId}`, {
           method: 'GET',
@@ -178,11 +189,16 @@ function Nav() {
         .then((res) => res.json())
         .then((data) => {
           console.log(`Fetched series:`, data);
-          setSeries(data);
+          if (!data.error) {
+            setSeries(data);
+          }
         })
     }
 
     const fetchTrendingSeries = () => {
+
+      // setPlaceholder("Trending🔥");
+
       fetch(`http://127.0.0.1:5000/api/series/trending`, {
         method: 'GET',
         headers: {'Content-Type': 'application/json'},
@@ -190,7 +206,9 @@ function Nav() {
       .then((res) => res.json())
       .then((data) => {
         console.log(`Fetched Trending series:`, data);
-        setSeries(data);
+        if (!data.error) {
+          setSeries(data);
+        }
       })
   }
 
@@ -202,14 +220,16 @@ function Nav() {
       .then((res) => res.json())
       .then((data) => {
           console.log(data);
-          setMoviesGenres(data);
+          if (!data.error) {
+            setMoviesGenres(data);
+          }
       });
   }
 
   const fetchMoviesByGenre = (event) => {
-      console.log(event.target);
       const genreId = event.target.id;
-      console.log(genreId);
+      console.log(event.target.textContent);
+      // setPlaceholder(event.target.textContent);
 
       fetch(`http://127.0.0.1:5000/api/movies/${genreId}`, {
         method: 'GET',
@@ -218,11 +238,16 @@ function Nav() {
       .then((res) => res.json())
       .then((data) => {
         console.log(`Fetched movies:`, data);
-        setMovies(data);
+        if (!data.error) {
+          setMovies(data);
+        }
       })
   }
 
   const fetchTrendingMovies = () => {
+
+    // setPlaceholder("Trending🔥");
+
     fetch(`http://127.0.0.1:5000/api/movies/trending`, {
       method: 'GET',
       headers: {'Content-Type': 'application/json'},
@@ -230,7 +255,9 @@ function Nav() {
     .then((res) => res.json())
     .then((data) => {
       console.log(`Fetched Trending series:`, data);
-      setMovies(data);
+      if (!data.error) {
+        setMovies(data);
+      }
     })
   }
 
@@ -262,7 +289,7 @@ function Nav() {
           {showMovieCategories && (
             <div className="movie-categories">
                 {/* movies genres */}
-                <div className="movie-category" onClick={fetchTrendingMovies}>
+                <div className="movie-category" onClick={fetchTrendingMovies} id="trending-movies-link">
                       Trending🔥
                 </div>
                 {moviesGenres && (moviesGenres.map((genre) => (
@@ -277,7 +304,7 @@ function Nav() {
           {showSeriesCategories && (
             <div className="movie-categories">
                 {/* Series genres */}
-                <div className="movie-category" onClick={fetchTrendingSeries}>
+                <div className="movie-category" onClick={fetchTrendingSeries} id="trending-series-link">
                       Trending🔥
                 </div>
                 {seriesGenres && (seriesGenres.map((genre) => (

@@ -68,14 +68,15 @@ export default function SeriesList(props) {
                 <Search />
             </div>
             <div className="movie-list-items">
-                {props.series.map((series) => (
+                {props.series.length === 0 ?  (<h2 className='no-results'>No results 😕 </h2>)  : (
+                    props.series.map((series) => (
                     <div className="movie-card" onClick={() => handleOpen(series)} key={series.id}>
                         <img src={'https://image.tmdb.org/t/p/original' + series.backdrop_path} className="movie-card-cover" />
                         <div className='overlay'> 
                             {series.name}
                         </div>
                     </div>
-                ))}
+                )))}
             </div>
         </div>
     )

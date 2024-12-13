@@ -323,6 +323,8 @@ a:hover {
   background-color: #2E333D;
   /* border: 1px solid wheat; */
   width: 400px !important; /* + Responsive */
+  height: 94vh;
+  overflow: auto;
 }
 
 .nav-channels {
@@ -490,14 +492,14 @@ a:hover {
 .movie-categories {
   background-color: #2E333D;
   width: 100%;
-  height: 75vh !important;
+  /* height: 75vh !important; */
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   overflow: scroll;
-  border: 1px solid white;
-  padding-top: 1000px;
+  /* border: 1px solid white; */
+  margin: 0;
 }
 
 .movie-category {
@@ -729,6 +731,7 @@ a:hover {
 .modal-movie-description {
   color: white;
   width: 80%;
+  margin-top: 10px;
 }
 
 .modal-movie-info {
@@ -767,3 +770,13 @@ a:hover {
 /* .content {
   display: none;
 } */
+
+.no-results {
+  color: white;
+  text-align: center;
+  /* border: 1px solid white; */
+  margin: 200px auto;
+  font-family: "Kodchasan", sans-serif;
+  font-weight: 500;
+  font-style: normal;
+}

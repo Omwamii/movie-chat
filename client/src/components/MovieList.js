@@ -68,14 +68,14 @@ export default function MovieList(props) {
                 <Search />
             </div>
             <div className="movie-list-items">
-                {props.movies.map((movie) => (
+                {props.movies.length === 0 ? (<h2 className='no-results'>No results 😕 </h2>) : (props.movies.map((movie) => (
                     <div className="movie-card" onClick={() => handleOpen(movie)} key={movie.id}>
                         <img src={'https://image.tmdb.org/t/p/original' + movie.backdrop_path} className="movie-card-cover" />
                         <div className='overlay'> 
                             {movie.title}
                         </div>
                     </div>
-                ))}
+                )))}
             </div>
         </div>
     )
