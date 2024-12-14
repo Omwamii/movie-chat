@@ -10,6 +10,9 @@ import SeriesCategories from "./SeriesCategories.js"
 import MovieList from './MovieList';
 import Chat from './Chat';
 import SeriesList from './SeriesList';
+import useGetAllChannels from '../hooks/useGetAllChannels';
+import useGetUserChannels from '../hooks/useGetUserChannels';
+import useChannels from '../z-store/useChannels';
 
 function Nav() {
     const [value, setValue] = useState('');
@@ -23,6 +26,9 @@ function Nav() {
     const linkRef = useRef(null);
     const [seriesGenres, setSeriesGenres] = useState([]);
     const [moviesGenres, setMoviesGenres] = useState([]);
+    const { loading: allChannelsLoading, allChannels }= useGetAllChannels();
+    const { loading: myChannelsLoading, myChannels } = useGetUserChannels();
+
     // const [placeholder, setPlaceholder] = useState("Trending🔥"); // placeholder for <Search /> component, to change with genres
 
     const navElement = document.getElementsByClassName('nav')[0];
@@ -42,6 +48,7 @@ function Nav() {
     }, []);
 
     function handleAllChannelsClicked(event) {
+      console.log(allChannels)
         
       showContent();
 
@@ -65,6 +72,7 @@ function Nav() {
     }
 
     function handleMyChannelsClicked(event) {
+      console.log(myChannels);
 
       showContent();
 

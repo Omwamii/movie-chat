@@ -1,7 +1,9 @@
 import React, { useState } from "react";
+import useSignup from "../hooks/useSignup.js";
+import { signedCookie } from "cookie-parser";
 
 export default function Signup() {
-
+    const {loading, signup} = useSignup();
     const [formData, setFormData] = useState({
         username: "",
         password: "",
@@ -16,7 +18,7 @@ export default function Signup() {
         }));
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async(e) => {
         e.preventDefault();
         
         // Check if passwords match
@@ -28,20 +30,21 @@ export default function Signup() {
         // Handle signup logic here
         console.log("Signup details:", formData);
 
-        signupUser();
+        // signupUser();
+        await signup(formData)
     }
 
-        const signupUser = () => {
-            fetch('http://127.0.0.1:5000/api/auth/signup', {
-                method: 'POST',
-                headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify(formData)
-            })
-            .then((res) => res.json())
-            .then((data) => {
-                console.log(data);
-            });
-        }
+        // const signupUser = () => {
+        //     fetch('http://127.0.0.1:5000/api/auth/signup', {
+        //         method: 'POST',
+        //         headers: {'Content-Type': 'application/json'},
+        //         body: JSON.stringify(formData)
+        //     })
+        //     .then((res) => res.json())
+        //     .then((data) => {
+        //         console.log(data);
+        //     });
+        // }
 
     return (
         <div>

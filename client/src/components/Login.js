@@ -1,6 +1,8 @@
 import React, { useState } from "react";
+import useLogin from "../hooks/useLogin";
 
 export default function Login() {
+    const { loading, login } = useLogin()
     const [formData, setFormData] = useState({
         username: "",
         password: "",
@@ -14,25 +16,27 @@ export default function Login() {
         }));
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
         // Handle login logic here
         console.log("Login details:", formData);
 
-        loginUser();
+        // loginUser();
+        await login(formData);
+
     };
 
-    const loginUser = () => {
-        fetch('http://127.0.0.1:5000/api/auth/login', {
-            method: 'POST',
-            headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify(formData)
-        })
-        .then((res) => res.json())
-        .then((data) => {
-            console.log(data);
-        });
-    }
+    // const loginUser = () => {
+    //     fetch('http://127.0.0.1:5000/api/auth/login', {
+    //         method: 'POST',
+    //         headers: {'Content-Type': 'application/json'},
+    //         body: JSON.stringify(formData)
+    //     })
+    //     .then((res) => res.json())
+    //     .then((data) => {
+    //         console.log(data);
+    //     });
+    // }
 
     return (
         <div>

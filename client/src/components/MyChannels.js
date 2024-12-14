@@ -2,9 +2,13 @@
 import React, { useState } from "react";
 import { InputText } from "primereact/inputtext";
 import movieIcon from '../assets/images/from-cover.jpg'
+import useChannels from "../z-store/useChannels";
 
 function MyChannels() {
   const [value, setValue] = useState("");
+  const { selectedChannel, setSelectedChannel } = useChannels();
+
+  // const isSelected = selectedChannel?._id === channel._id // channel is prop
 
   return (
     <div className="list-channels">
