@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useAuthContext } from "../context/AuthContext";
 
-export default useSignup = () => {
+const useSignup = () => {
     const [loading, setLoading] = useState(false);
     const { setAuthUser } = useAuthContext();
 
@@ -35,3 +35,5 @@ export default useSignup = () => {
 
     return { loading, signup}
 }
+
+export default useSignup;

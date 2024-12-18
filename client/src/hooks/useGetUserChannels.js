@@ -1,18 +1,23 @@
-// get all movie channels that have been created
+// get channels that user has joined
+
 import { useEffect, useState } from "react"
 
-const useGetAllChannels = () => {
+const useGetUserChannels = () => {
     const [loading, setLoading] = useState(false);
     const [channels, setChannels] = useState([])
 
     useEffect(() => {
-        const getAllChannels = async () => {
+        const getUserChannels = async () => {
             setLoading(true);
             try {
-                const response = await fetch('http://127.0.0.1:5000/api/channels/all');
+                // const userId = JSON.parse(localStorage.getItem('user'))._id
+                // if (!userId) {
+                //     throw new Error('Invalid User id');
+                // }
+                const response = await fetch(`http://127.0.0.1:5000/api/channels/mine`);
 
                 const data = await response.json();
-                console.log('fetched channels : ', data);
+                console.log('fetched user\'s channels : ', data);
                 if (data.error) {
                     throw new Error(data.error);
                 }
@@ -26,11 +31,10 @@ const useGetAllChannels = () => {
                 setLoading(false);
             }
         }
-
-        getAllChannels();
+        getUserChannels();
     }, [])
 
-    return { loading, channels };
+    return { loading, channels }
 }
 
-export default useGetAllChannels
+export default useGetUserChannels;

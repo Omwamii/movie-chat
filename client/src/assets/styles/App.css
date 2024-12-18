@@ -199,6 +199,7 @@ a:hover {
   /* border: 1px solid white; */
   display: flex;
   justify-content: center;
+  margin-bottom: 60px;
 }
 
 .drop-emoji-picker {
@@ -266,6 +267,10 @@ a:hover {
 .list-channel:hover {
   background-color: #373E4D;
   cursor: pointer;
+}
+
+.list-channel.selected {
+  background-color: #373E4D;
 }
 
 .list-channel-image {
