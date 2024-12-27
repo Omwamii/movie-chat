@@ -1,8 +1,8 @@
 // Page with movies in a certain category
 import * as React from 'react';
-import Search from "./Search";
 import SeriesModal from './SeriesModal';
 import useSeriesModal from '../z-store/useSeriesModal';
+import ContentHeader from './ContentHeader';
 
 export default function SeriesList({ series }) {
     const { setOpen } = useSeriesModal();
@@ -15,11 +15,6 @@ export default function SeriesList({ series }) {
     }
 
     return (
-        <div className="movie-list">
-            <SeriesModal />
-            <div className="movie-list-header">
-                <Search />
-            </div>
             <div className="movie-list-items">
                 {series.length === 0 ?  (<h2 className='no-results'>No results 😕 </h2>)  : (
                     series.map((item) => (
@@ -31,6 +26,5 @@ export default function SeriesList({ series }) {
                     </div>
                 )))}
             </div>
-        </div>
     )
 }

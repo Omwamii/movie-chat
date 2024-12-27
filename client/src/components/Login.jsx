@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import useLogin from "../hooks/useLogin";
+import { Link } from "react-router-dom";
 
 export default function Login() {
     const { loading, login } = useLogin()
@@ -50,6 +51,9 @@ export default function Login() {
                 />
 
                 <button type="submit">Log In</button>
+                <div>
+                    Don't have an account? <Link to='/signup'>Sign Up</Link>
+                </div>
             </form>
         </div>
     );

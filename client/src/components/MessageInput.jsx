@@ -11,6 +11,10 @@ function MessageInput() {
     const { showEmojiPicker, setShowEmojiPicker } = useEmojiPicker();
 
     // Function to handle emoji selection
+    function handleSendClicked() {
+        console.log(inputValue);
+        // SEND 
+    }
 
     return (
         <div className="emoji-input-section">
@@ -25,11 +29,11 @@ function MessageInput() {
                 </div>
 
                 <div className="chat-input-container">
-                    <input  className="chat-input" placeholder="what's up?" value='' onChange={(e) => setInputValue(e.target.value)}/>
+                    <input  className="chat-input" placeholder="what's up?" value={inputValue} onChange={(e) => setInputValue(e.target.value)}/>
                 </div>
 
                 <div className="send-section">
-                    <img src={sendIcon} alt="Send" className="send-icon" />
+                    <img src={sendIcon} alt="Send" className="send-icon" onClick={handleSendClicked}/>
                 </div>
             </div>
         </div>

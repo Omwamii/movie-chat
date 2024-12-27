@@ -225,10 +225,10 @@ a:hover {
 .emoji-input-section {
   position: absolute; 
   bottom: 0.5%;
-  left: 5%;
-  width: 100%;
+  /* left: 5%; */
+  width: 98%;
   z-index: 10;
-  width: 700px;
+  /* width: 700px; */
 }
 
 .chat {
@@ -316,13 +316,12 @@ a:hover {
   align-self: flex-end; */
 }
 
-
-
 .channel-movie-cover {
   width: 60px;
   height: 60px;
   border-radius: 30px;
 }
+
 
 .nav {
   background-color: #2E333D;
@@ -342,10 +341,6 @@ a:hover {
 .nav-channels-single {
   display: flex;
   flex-direction: column;
-}
-
-.nav {
-  width: 400px; /* + Responsive */
 }
 
 .nav-channels-single a {
@@ -480,8 +475,8 @@ a:hover {
 .chat-canvas {
   display: flex;
   flex-direction: column;
-  overflow: scroll;
   height: 85%;
+  /* border: 1px solid white; */
 }
 
 .chat-canvas .not-my-message {
@@ -502,7 +497,6 @@ a:hover {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  overflow: scroll;
   /* border: 1px solid white; */
   margin: 0;
 }
@@ -720,8 +714,11 @@ a:hover {
 }
 
 .movie-list-header {
-  width: 75%;
+  width: 80%;
   margin: 15px auto;
+  display: flex;
+  justify-content: space-between;
+  /* border: 1px solid white; */
 }
 
 .modal-movie-cover {
@@ -772,10 +769,6 @@ a:hover {
   display: block;
 }
 
-/* .content {
-  display: none;
-} */
-
 .no-results {
   color: white;
   text-align: center;
@@ -784,4 +777,108 @@ a:hover {
   font-family: "Kodchasan", sans-serif;
   font-weight: 500;
   font-style: normal;
+}
+
+.back-arrow-content, .back-arrow-chat {
+  display: none;
+}
+
+.search-content {
+  /* border: 1px solid white; */
+  width: 90%;
+  margin-left: 10px;
+}
+
+.back-arrow-icon:hover {
+  cursor: pointer;
+}
+
+.loading-spinner {
+  margin: 42% auto;
+  width: 0;
+}
+
+@media only screen and (max-width: 991.99px) {
+  .content:not(.active) {
+    display: none;
+  }
+
+  .nav:not(.active) {
+    display: none;
+  }
+
+  .back-arrow-content {
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+  }
+
+  .back-arrow-chat {
+    display: block;
+  }
+
+  @media (min-width: 767.99px) {
+    .chat {
+      width: 600px;
+    }
+
+    .nav {
+      border: 1px solid white;
+      width: 500px !important;
+    }
+
+    .message {
+      width: 300px;
+    }
+
+    .emoji-face {
+      width: 15px;
+      height: 15px;
+    }
+
+    .emoji-select {
+      width: 35px;
+      height: 35px;
+    }
+
+    .send-icon {
+      width: 20px;
+      height: 20px;
+    }
+
+    .message-reply-action {
+      width: 15px;
+      height: 15px;
+    }
+
+    .group-name {
+      font-size: 25px;
+    }
+
+    .group-menu-icon {
+      width: 25px;
+      height: 25px;
+    }
+
+    .list-channel-num-chats {
+      height: 15px;
+      height: 15px;
+    }
+
+    .movie-card-cover {
+      width: 200px;
+      height: 200px;
+    }
+
+    .modal-movie-cover {
+      width: 450px;
+      height: 450px;
+    }
+
+    .modal-movie-action button {
+      width: 145px;
+      height: 45px;
+    }
+
+  }
 }

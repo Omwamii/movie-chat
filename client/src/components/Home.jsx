@@ -12,8 +12,15 @@ import SeriesList from './SeriesList';
 import useGetAllChannels from '../hooks/useGetAllChannels';
 import useGetUserChannels from '../hooks/useGetUserChannels.js';
 import useChannels from '../z-store/useChannels';
+// import SyncLoader from "react-spinners/SyncLoader";
+import useMovieModal from '../z-store/useMovieModal';
+import MovieModal from './MovieModal';
+import ContentHeader from './ContentHeader';
+import SeriesModal from './SeriesModal';
+import useSeriesModal from '../z-store/useSeriesModal';
+import LoadingSpinner from "./LoadingSpinner";
 
-function Nav() {
+function Home() {
     const [value, setValue] = useState('');
     const [showMyChannels, setShowMyChannels] = useState(true);
     const [showAllChannels, setShowAllChannels] = useState(false);
@@ -25,6 +32,7 @@ function Nav() {
     const linkRef = useRef(null);
     const [seriesGenres, setSeriesGenres] = useState([]);
     const [moviesGenres, setMoviesGenres] = useState([]);
+    const [isLoading, setIsLoading] = useState(false);
     const { loading: allChannelsLoading, allChannels } = useGetAllChannels();
     const { loading: myChannelsLoading, myChannels } = useGetUserChannels();
 
@@ -181,13 +189,15 @@ function Nav() {
             if (!data.error) {
               setSeriesGenres(data);
             }
-        });
+        })
     }
 
     const fetchSeriesByGenre = (event) => {
         const genreId = event.target.id;
         console.log(event.target.textContent);
         // setPlaceholder(event.target.textContent);
+
+        setIsLoading(true);
 
         fetch(`http://127.0.0.1:5000/api/series/${genreId}`, {
           method: 'GET',
@@ -200,11 +210,13 @@ function Nav() {
             setSeries(data);
           }
         })
+        .finally(() => setIsLoading(false))
     }
 
     const fetchTrendingSeries = () => {
 
       // setPlaceholder("Trending🔥");
+      setIsLoading(true);
 
       fetch(`http://127.0.0.1:5000/api/series/trending`, {
         method: 'GET',
@@ -217,6 +229,7 @@ function Nav() {
           setSeries(data);
         }
       })
+      .finally(() => setIsLoading(false))
   }
 
     const fetchMoviesGenres = () => {
@@ -230,13 +243,15 @@ function Nav() {
           if (!data.error) {
             setMoviesGenres(data);
           }
-      });
+      })
   }
 
   const fetchMoviesByGenre = (event) => {
       const genreId = event.target.id;
       console.log(event.target.textContent);
       // setPlaceholder(event.target.textContent);
+
+      setIsLoading(true);
 
       fetch(`http://127.0.0.1:5000/api/movies/${genreId}`, {
         method: 'GET',
@@ -249,11 +264,14 @@ function Nav() {
           setMovies(data);
         }
       })
+      .finally(() => setIsLoading(false))
   }
 
   const fetchTrendingMovies = () => {
 
     // setPlaceholder("Trending🔥");
+
+    setIsLoading(true);
 
     fetch(`http://127.0.0.1:5000/api/movies/trending`, {
       method: 'GET',
@@ -266,6 +284,7 @@ function Nav() {
         setMovies(data);
       }
     })
+    .finally(() => setIsLoading(false))
   }
 
   const chat = {
@@ -274,26 +293,45 @@ function Nav() {
     title: 'From',
   }
 
-    //
-
     return (
-      <div className='container'>
+      <div className="container">
         <div className="nav active">
           <div className="search-channels">
             <Search />
           </div>
           <div className="nav-channels">
             <div className="nav-channels-single">
-              <a onClick={handleMyChannelsClicked} ref={linkRef} className='channels-navlink'>Your chats</a>
+              <a
+                onClick={handleMyChannelsClicked}
+                ref={linkRef}
+                className="channels-navlink"
+              >
+                Your chats
+              </a>
             </div>
             <div className="nav-channels-single">
-              <a onClick={handleAllChannelsClicked} className='channels-navlink'>All chats</a>
+              <a
+                onClick={handleAllChannelsClicked}
+                className="channels-navlink"
+              >
+                All chats
+              </a>
             </div>
             <div className="nav-channels-single">
-              <a onClick={handleMovieCategoriesClicked} className='channels-navlink'>Movies</a>
+              <a
+                onClick={handleMovieCategoriesClicked}
+                className="channels-navlink"
+              >
+                Movies
+              </a>
             </div>
             <div className="nav-channels-single">
-              <a onClick={handlesSeriesCategoriesClicked} className='channels-navlink'>Series</a>
+              <a
+                onClick={handlesSeriesCategoriesClicked}
+                className="channels-navlink"
+              >
+                Series
+              </a>
             </div>
           </div>
           {/* place channels or movie categories here based on navigation link visited */}
@@ -301,41 +339,78 @@ function Nav() {
           {showAllChannels && <AllChannels />}
           {showMovieCategories && (
             <div className="movie-categories">
-                {/* movies genres */}
-                <div className="movie-category" onClick={fetchTrendingMovies} id="trending-movies-link">
-                      Trending🔥
-                </div>
-                {moviesGenres && (moviesGenres.map((genre) => (
-                    <div className="movie-category" id={genre.id} key={genre.id} onClick={fetchMoviesByGenre}>
-                        {genre.name}
-                    </div>
-                )))}
-            </div> 
+              {/* movies genres */}
+              <div
+                className="movie-category"
+                onClick={fetchTrendingMovies}
+                id="trending-movies-link"
+              >
+                Trending🔥
+              </div>
+              {moviesGenres &&
+                moviesGenres.map((genre) => (
+                  <div
+                    className="movie-category"
+                    id={genre.id}
+                    key={genre.id}
+                    onClick={fetchMoviesByGenre}
+                  >
+                    {genre.name}
+                  </div>
+                ))}
+            </div>
           )}
 
           {/* {showSeriesCategories && <SeriesCategories />} */}
           {showSeriesCategories && (
             <div className="movie-categories">
-                {/* Series genres */}
-                <div className="movie-category" onClick={fetchTrendingSeries} id="trending-series-link">
-                      Trending🔥
-                </div>
-                {seriesGenres && (seriesGenres.map((genre) => (
-                    <div className="movie-category" id={genre.id} key={genre.id} onClick={fetchSeriesByGenre}>
-                        {genre.name}
-                    </div>
-                )))}
+              {/* Series genres */}
+              <div
+                className="movie-category"
+                onClick={fetchTrendingSeries}
+                id="trending-series-link"
+              >
+                Trending🔥
+              </div>
+              {seriesGenres &&
+                seriesGenres.map((genre) => (
+                  <div
+                    className="movie-category"
+                    id={genre.id}
+                    key={genre.id}
+                    onClick={fetchSeriesByGenre}
+                  >
+                    {genre.name}
+                  </div>
+                ))}
             </div>
           )}
-
         </div>
+
         <div className="content">
-          {showMovieCategories && <MovieList movies={movies}/>}
-          {showSeriesCategories && <SeriesList series={series} />}
-          {(showMyChannels || showAllChannels) && <Chat chat={chat}/>}
+          {showMovieCategories && (
+            <div className="movie-list">
+              <MovieModal />
+              <ContentHeader />
+              <div>
+                  {isLoading ? (<LoadingSpinner />) : (<MovieList movies={movies}/>)}
+              </div>
+          </div>
+          )}
+
+          {showSeriesCategories && (
+            <div className="movie-list">
+              <SeriesModal />
+              <ContentHeader />
+              <div>
+                {isLoading ? (<LoadingSpinner />) : (<SeriesList series={series} />)}
+              </div>
+            </div>
+          )}
+          {(showMyChannels || showAllChannels) && <Chat chat={chat} />}
         </div>
       </div>
     );
 }
 
-export default Nav;
+export default Home;

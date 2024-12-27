@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import useSignup from "../hooks/useSignup.js";
 import { signedCookie } from "cookie-parser";
+import { Link } from "react-router-dom";
 
 export default function Signup() {
     const { loading, signup } = useSignup();
@@ -70,6 +71,9 @@ export default function Signup() {
                 />
 
                 <button type="submit">Sign Up</button>
+                <div>
+                    Already have an account? <Link to='/login'>Log in</Link>
+                </div>
             </form>
         </div>
     );

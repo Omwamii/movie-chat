@@ -5,12 +5,18 @@ import useChatInput from "../z-store/useChatInput";
 import useEmojiPicker from "../z-store/useEmojiPicker";
 
 export default function EmojiPicker () {
-    const { setInputValue } = useChatInput();
+    const { setInputValue, inputValue } = useChatInput();
     const { showEmojiPicker } = useEmojiPicker();
 
+    // const handleEmojiSelect = (emoji) => {
+    //     setInputValue((prev) => prev + emoji.native); // Append emoji to input value
+    // };
+
     const handleEmojiSelect = (emoji) => {
-        setInputValue((prev) => prev + emoji.native); // Append emoji to input value
+        const updatedInput = inputValue + emoji.native;
+        setInputValue(updatedInput);
     };
+
 
     const handleClickedOutside = () => {
         // hide the picker on clicking outside

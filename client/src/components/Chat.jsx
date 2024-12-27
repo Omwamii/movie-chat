@@ -14,7 +14,7 @@ import useChatInput from "../z-store/useChatInput";
 function Chat({ chat }) {
     // const { reply } = useReplyPreview();
     const { showEmojiPicker } = useEmojiPicker();
-    const { setInputValue } = useChatInput();
+    const { setInputValue, inputValue } = useChatInput();
 
     const reply = {
         username: 'Iano',
@@ -22,12 +22,12 @@ function Chat({ chat }) {
     }
 
     const handleEmojiSelect = (emoji) => {
-        console.log('handle emoji select clicked', emoji.native);
-        setInputValue((prev) => prev + emoji.native); // Append emoji to input value
-        console.log('added emoji to input');
+        const updatedInput = inputValue + emoji.native;
+        setInputValue(updatedInput);
     };
 
-    const handleClickedOutside = () => {
+    const handleClickedOutside = (event) => {
+        console.log(event);
         // hide the picker on clicking outside
         console.log('clicked outside the picker');
     }
