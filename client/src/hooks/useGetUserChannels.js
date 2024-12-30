@@ -14,7 +14,7 @@ const useGetUserChannels = () => {
                 // if (!userId) {
                 //     throw new Error('Invalid User id');
                 // }
-                const response = await fetch(`http://127.0.0.1:5000/api/channels/mine`);
+                const response = await fetch('/api/channels/mine');
 
                 const data = await response.json();
                 console.log('fetched user\'s channels : ', data);

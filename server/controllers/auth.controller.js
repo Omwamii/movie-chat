@@ -34,14 +34,15 @@ export const signup = async (req, res) => {
         if (newUser) {
             generateToken(newUser._id, res)
             await newUser.save();
+            const userObj = newUser.toObject();
 
-            return res.status(201).json(newUser)
+            return res.status(201).json(userObj);
         } else {
             res.status(400).json({error: 'Invalid user data'})
         }
     } catch (error) {
         console.log("Error" + error);
-        res.send(500).json({error: "Internal server error"})
+        res.send(500).json({error: error.message})
     }
 }
 
@@ -63,8 +64,9 @@ export const login = async (req, res) => {
 
         generateToken(user._id, res);
 
+        const userObj = user.toObject();
         return res.status(200).json({
-            ...user
+            ...userObj
         })
 
     } catch (error) {

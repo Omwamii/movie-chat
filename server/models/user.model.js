@@ -11,17 +11,12 @@ const UserSchema = new mongoose.Schema({
         required: true,
         minlength: 6
     },
-    // joinedChannels: [
-    //     {
-    //         type: mongoose.Schema.Types.ObjectId,
-    //         ref: "Channel",
-    //     }
-    // ],
-    // sentMessages: {
-    //     {
-    //         type: mongoose
-    //     }
-    // }
+    joinedChannels: [
+        {
+            type: Number,
+            ref: "Channel",
+        }
+    ],
     colour: String // each user gets a random colour for their name display
 }, {timestamps: true});
 

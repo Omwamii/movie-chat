@@ -19,6 +19,7 @@ import ContentHeader from './ContentHeader';
 import SeriesModal from './SeriesModal';
 import useSeriesModal from '../z-store/useSeriesModal';
 import LoadingSpinner from "./LoadingSpinner";
+import { toast } from "react-hot-toast";
 
 function Home() {
     const [value, setValue] = useState('');
@@ -35,6 +36,8 @@ function Home() {
     const [isLoading, setIsLoading] = useState(false);
     const { loading: allChannelsLoading, allChannels } = useGetAllChannels();
     const { loading: myChannelsLoading, myChannels } = useGetUserChannels();
+    const [seriesChannelsIds, setSeriesChannelsIds] = useState([]);
+    const [movieChannelsIds, setmovieChannelsIds] = useState([]);
 
     // const [placeholder, setPlaceholder] = useState("Trending🔥"); // placeholder for <Search /> component, to change with genres
 
@@ -108,6 +111,7 @@ function Home() {
       // link.click();
 
       fetchTrendingMovies();
+      getMoviesChannelIds();
 
       showContent()
 
@@ -136,6 +140,7 @@ function Home() {
       // console.log(link)
       // link.click();
       fetchTrendingSeries();
+      getSeriesChannelIds();
 
       showContent()
 
@@ -179,7 +184,7 @@ function Home() {
     // const [seriesGenres, setSeriesGenres] = useState([]);
 
     const fetchSeriesGenres = () => {
-        fetch('http://127.0.0.1:5000/api/series/genres', {
+        fetch('/api/series/genres', {
             method: 'GET',
             headers: {'Content-Type': 'application/json'},
         })
@@ -199,7 +204,7 @@ function Home() {
 
         setIsLoading(true);
 
-        fetch(`http://127.0.0.1:5000/api/series/${genreId}`, {
+        fetch(`/api/series/${genreId}`, {
           method: 'GET',
           headers: {'Content-Type': 'application/json'},
         })
@@ -218,7 +223,7 @@ function Home() {
       // setPlaceholder("Trending🔥");
       setIsLoading(true);
 
-      fetch(`http://127.0.0.1:5000/api/series/trending`, {
+      fetch(`/api/series/trending`, {
         method: 'GET',
         headers: {'Content-Type': 'application/json'},
       })
@@ -233,7 +238,7 @@ function Home() {
   }
 
     const fetchMoviesGenres = () => {
-      fetch('http://127.0.0.1:5000/api/movies/genres', {
+      fetch('/api/movies/genres', {
           method: 'GET',
           headers: {'Content-Type': 'application/json'},
       })
@@ -253,7 +258,7 @@ function Home() {
 
       setIsLoading(true);
 
-      fetch(`http://127.0.0.1:5000/api/movies/${genreId}`, {
+      fetch(`/api/movies/${genreId}`, {
         method: 'GET',
         headers: {'Content-Type': 'application/json'},
       })
@@ -273,7 +278,7 @@ function Home() {
 
     setIsLoading(true);
 
-    fetch(`http://127.0.0.1:5000/api/movies/trending`, {
+    fetch(`/api/movies/trending`, {
       method: 'GET',
       headers: {'Content-Type': 'application/json'},
     })
@@ -291,6 +296,39 @@ function Home() {
     total_users: '44',
     online_users: '4',
     title: 'From',
+  }
+
+  const getSeriesChannelIds = () => {
+    fetch(`/api/channels/ids/series`, {
+      method: 'GET',
+      headers: {'Content-Type': 'application/json'},
+    })
+    .then((res) => res.json())
+    .then((data) => {
+      console.log(`Fetched series ids:`, data);
+      if (!data.error) {
+        setSeriesChannelsIds(data)
+      } else {
+        toast.error(data.error)
+      }
+    })
+  }
+
+  const getMoviesChannelIds = () => {
+    fetch(`/api/channels/ids/movie`, {
+      method: 'GET',
+      headers: {'Content-Type': 'application/json'},
+    })
+    .then((res) => res.json())
+    .then((data) => {
+      console.log(`Fetched movies ids:`, data);
+      if (!data.error) {
+        console.log(data)
+        setmovieChannelsIds(data)
+      } else {
+        toast.error(data.error)
+      }
+    })
   }
 
     return (
@@ -390,7 +428,7 @@ function Home() {
         <div className="content">
           {showMovieCategories && (
             <div className="movie-list">
-              <MovieModal />
+              <MovieModal channels={movieChannelsIds} />
               <ContentHeader />
               <div>
                   {isLoading ? (<LoadingSpinner />) : (<MovieList movies={movies}/>)}
@@ -400,7 +438,7 @@ function Home() {
 
           {showSeriesCategories && (
             <div className="movie-list">
-              <SeriesModal />
+              <SeriesModal channels={seriesChannelsIds} />
               <ContentHeader />
               <div>
                 {isLoading ? (<LoadingSpinner />) : (<SeriesList series={series} />)}

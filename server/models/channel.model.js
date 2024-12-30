@@ -6,6 +6,21 @@ const ChannelSchema = new mongoose.Schema({
         required: true,
         unique: true
     },
+    creatorId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User",
+        required: true,
+    },
+    filmId: {
+        type: Number,
+        unique: true,
+        required: true,
+    }, // the movie or series id as fetched from the API
+    type: {
+        type: String,
+        enum: ['movie', 'series'], // Either a movie channel or series channel
+        required: true,
+    },
     users: [
         {
             type: mongoose.Schema.Types.ObjectId,

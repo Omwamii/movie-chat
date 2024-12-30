@@ -15,7 +15,9 @@ const guardRoute = async (req, res, next) => {
             return res.status(401).json({error: "Unauthorized - Incorrect credentials"})
         }
 
-        const user = await User.findOne(userData.userId).select("-password");
+        const user = await User.findOne({
+            _id: userData.userId
+        }).select("-password");
 
         if (!user) {
             return res.status(404).json({error: "No such user"})
