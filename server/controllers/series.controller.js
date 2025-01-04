@@ -25,7 +25,7 @@ export const searchSeriesByGenre = async (req, res) => {
     const API_TOKEN = process.env.TMDB_READ_ACCESS_TOKEN;
 
     // console.log(query);
-    console.log(req.body);
+    // console.log(req.body);
 
     // console.log("Searching movie");
 
@@ -66,7 +66,7 @@ export const getTrendingSeries = async (req, res) => {
             params: { api_key: API_KEY },
         });
         
-        console.log(response.data)
+        // console.log(response.data)
 
         res.json(response.data.results);
     } catch (error) {
@@ -88,7 +88,7 @@ export const getSeriesByGenre = async (req, res) => {
         const filteredSeries = filterByGenre(Number(genreId), response.data.results);
         // console.log(filteredMovies);
 
-        console.log()
+        // console.log()
         res.json(filteredSeries);
     } catch (error) {
         console.error('Error fetching movies:', error.message);

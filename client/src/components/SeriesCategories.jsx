@@ -15,13 +15,13 @@ function SeriesCategories () {
         })
         .then((res) => res.json())
         .then((data) => {
-            console.log(data);
+            // console.log(data);
             setSeriesGenres(data);
         });
     }
 
     const fetchSeriesByGenre = (event) => {
-        console.log(event.target);
+        // console.log(event.target);
     }
 
     return (

@@ -29,7 +29,7 @@ export default function Signup() {
         }
 
         // Handle signup logic here
-        console.log("Signup details:", formData);
+        // console.log("Signup details:", formData);
 
         // signupUser();
         await signup(formData)

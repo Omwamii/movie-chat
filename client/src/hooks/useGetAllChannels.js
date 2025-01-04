@@ -1,5 +1,6 @@
 // get all movie channels that have been created
 import { useEffect, useState } from "react"
+import { toast } from "react-hot-toast";
 
 const useGetAllChannels = () => {
     const [loading, setLoading] = useState(false);
@@ -12,7 +13,8 @@ const useGetAllChannels = () => {
                 const response = await fetch('/api/channels/all');
 
                 const data = await response.json();
-                console.log('fetched channels : ', data);
+                console.log('fetched all channels : ', data);
+
                 if (data.error) {
                     throw new Error(data.error);
                 }
@@ -20,7 +22,7 @@ const useGetAllChannels = () => {
                 setChannels(data);
 
             } catch (error) {
-                // toast the error
+                toast.error(error.message)
                 console.error(error);
             } finally {
                 setLoading(false);

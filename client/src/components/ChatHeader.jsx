@@ -15,8 +15,8 @@ export default function ChatHeader({ chat }) {
         if (!navElement.classList.contains('active')) {
             navElement.classList.add('active');
         }
-        console.log(contentElement);
-        console.log(navElement);
+        // console.log(contentElement);
+        //console.log(navElement);
     }
 
     return (
@@ -25,7 +25,7 @@ export default function ChatHeader({ chat }) {
                 <img src={backArrow} alt="back" className="back-arrow-icon" onClick={goBack}/>
             </div>
             <div className="group-members-number">
-                {chat.total_users} chat buddies, {chat.online_users} online
+                {chat ? chat.users.length : '44'} chat buddies, {chat.online_users ? chat.online_users : '4'} online
             </div>
             <div className="group-name">
                 {chat.title}

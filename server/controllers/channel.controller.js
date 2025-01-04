@@ -1,25 +1,27 @@
 import Channel from "../models/channel.model.js"
 import User from "../models/user.model.js";
+import Message from "../models/message.model.js";
 import mongoose from "mongoose";
 
 export const createChannel = async (req, res) => {
-    const { title, filmId, type, creatorId } = req.body;
+    const { title, filmId, type, creatorId, icon } = req.body;
 
     try {
         const channel = await Channel.findOne({
             title,
             filmId
         })
-        console.log(channel)
+        // console.log(channel)
         if (channel) {
             return res.status(400).json({error: "This channel already exists"})
         }
 
         const newChannel = Channel({
             title,
-            creatorId,
+            creator: creatorId,
             filmId,
             type,
+            icon,
         })
         await newChannel.save()
         return res.status(201).json(newChannel)
@@ -43,9 +45,12 @@ export const deleteChannel = async (req, res) => {
 }
 
 export const getAllChannels = async (req, res) => {
+    // console.log('get all');
     try {
         // Fetch all channels
-        const channels = await Channel.find();
+        const channels = await Channel.find()
+
+        // console.log('all chanels', channels)
 
         return res.status(200).json(channels);
     } catch (error) {
@@ -56,12 +61,37 @@ export const getAllChannels = async (req, res) => {
 
 export const getMyChannels = async (req, res) => {
     const userId = req.user._id;
+    // console.log('get mine')
+    // console.log(req.user)
 
     try {
-        // Fetch channels user has joined
-        const myChannels = await Channel.find({ users: userId });
+        const channels = await Channel.find().lean({ virtuals: true }).populate({
+            path: "messages",
+            populate: [
+                { path: "sender", select: "username" },
+                { path: "replyTo", populate: {
+                    path: "sender",
+                    select: "username _id"
+                }},
+            ],
+        })
 
-        return res.status(200).json(myChannels);
+        for (const channel of channels) {
+            const unreadCount = await Message.countDocuments({
+                channel: channel._id,
+                readBy: { $ne: userId },
+            });
+            channel.unreadCount = unreadCount;
+
+            if (channel.messages && channel.messages.length > 0) {
+                const lastMessage = channel.messages[channel.messages.length - 1];
+                channel.lastMessage = lastMessage;
+            }
+        }
+
+        // console.log('user channels', channels)
+
+        return res.status(200).json(channels);
     } catch (error) {
         console.error(error.message);
         return res.status(500).json({ error: "An error occured getting user's channels "});
@@ -86,7 +116,7 @@ export const joinChannel = async (req, res) => {
 
         // console.log(channel.users, userId)
         const channelUsers = channel.users.map(user => user.toString()) // convert objectIds to string
-        console.log(channelUsers.includes(userId))
+        // console.log(channelUsers.includes(userId))
 
         if (channelUsers.includes(userId)) {
             return res.status(400).json({ error: "You already joined the channel" });
@@ -103,25 +133,38 @@ export const joinChannel = async (req, res) => {
         return res.status(200).json({ message: "You successfully joined the channel" });
     } catch (error) {
         console.error(error);
-        return res.status(500).json({ message: "An error occurred" });
+        return res.status(500).json({ error: "An error occurred" });
     }
 };
 
 export const getChannelIds = async(req, res) => {
     try {
         const { type } = req.params; // 'series' or 'movie'
-        console.log(type)
+        // console.log(type)
         if (type !== 'movie' && type !== 'series') {
-            return res.status(400).json({ message: "Invalid channel type" });
+            return res.status(400).json({ error: "Invalid channel type" });
         }
+
+        const channelIds = []
         const channels = await Channel.find({
             type,
         }).select('filmId -_id')
-        const channelIds = []
         channels.forEach((item) => channelIds.push(item.filmId))
 
         return res.status(200).json(channelIds)
     } catch (error) {
-        return res.status(500).json({message: "An error occured"})
+        return res.status(500).json({error: "An error occured"})
+    }
+}
+
+export const getUserJoinedChannelsIds = async(req, res) => {
+    try {
+        const { userId } = req.body;
+        const user = await User.findOne({
+            _id: userId
+        })
+        return res.status(200).json(user.joinedChannels)
+    } catch (error) {
+        return res.status(500).json({error: "An error occured"})
     }
 }

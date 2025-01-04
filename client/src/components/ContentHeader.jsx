@@ -13,8 +13,8 @@ const ContentHeader = () => {
         if (!navElement.classList.contains('active')) {
             navElement.classList.add('active');
         }
-        console.log(contentElement);
-        console.log(navElement);
+        // console.log(contentElement);
+        // console.log(navElement);
     }
 
     return (

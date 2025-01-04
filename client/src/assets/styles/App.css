@@ -186,8 +186,9 @@ a:hover {
 }
 
 .chat-input {
-  margin-bottom: 0;
   font-size: 18px;
+  /* position: relative; */
+  height: 50px;
 }
 
 .emoji-picker {
@@ -197,9 +198,12 @@ a:hover {
 
 .emoji-picker-div {
   /* border: 1px solid white; */
-  display: flex;
-  justify-content: center;
-  margin-bottom: 60px;
+  /* display: flex;
+  justify-content: center; */
+  position: absolute;
+  bottom: 80px;
+  margin: 0 auto;
+  left: 1%;
 }
 
 .drop-emoji-picker {
@@ -222,20 +226,18 @@ a:hover {
   cursor: pointer;
 }
 
-.emoji-input-section {
+/* .emoji-input-section {
   position: absolute; 
   bottom: 0.5%;
-  /* left: 5%; */
   width: 98%;
   z-index: 10;
-  /* width: 700px; */
-}
+} */
 
 .chat {
   width: 800px; /* + Responsive */
-  height: 93vh;
+  height: 93.9vh;
   padding: 10px;
-  overflow-y: scroll;
+  /* overflow-y: hidden; */
   position: relative;
 }
 
@@ -278,6 +280,8 @@ a:hover {
   align-self: center;
 }
 
+
+
 .list-channel-text-info {
   display: flex;
   flex-direction: column;
@@ -288,7 +292,6 @@ a:hover {
 .channel-header, .channel-body {
   display: flex;
   justify-content: space-between;
-  /* border: 1px solid red; */
   padding: 7px;
   width: inherit;
 }
@@ -317,9 +320,10 @@ a:hover {
 }
 
 .channel-movie-cover {
-  width: 60px;
-  height: 60px;
-  border-radius: 30px;
+  width: 80px;
+  height: 80px;
+  object-fit: cover;
+  border-radius: 50%;
 }
 
 
@@ -365,10 +369,7 @@ a:hover {
   width: 100%;
   display: flex;
   justify-content: space-evenly;
-  flex-wrap: nowrap;
   background-color: #2E333D;
-  /* border: 1px solid white; */
-  height: 50px;
 }
 
 .emoji-face {
@@ -476,7 +477,7 @@ a:hover {
   display: flex;
   flex-direction: column;
   height: 85%;
-  /* border: 1px solid white; */
+  overflow: auto;
 }
 
 .chat-canvas .not-my-message {
@@ -556,7 +557,7 @@ a:hover {
   font-style: normal;
   min-height: 60px;
   padding: 10px;
-  display: none;
+  /* display: none; */
   transition: display 0.6s ease;  
   border-left: 7px solid #6B8AFD;
 }
@@ -765,14 +766,17 @@ a:hover {
   transform: scale(1.03);
 }
 
-.reply-preview.show-reply-preview {
-  display: block;
+.reply-preview-section {
+  position: absolute;
+  bottom: 80.5px;
+  width: 95%;
+  z-index: 2;
+  margin: 0 auto;
 }
 
 .no-results {
   color: white;
   text-align: center;
-  /* border: 1px solid white; */
   margin: 200px auto;
   font-family: "Kodchasan", sans-serif;
   font-weight: 500;
@@ -784,7 +788,6 @@ a:hover {
 }
 
 .search-content {
-  /* border: 1px solid white; */
   width: 90%;
   margin-left: 10px;
 }
@@ -823,7 +826,6 @@ a:hover {
     }
 
     .nav {
-      border: 1px solid white;
       width: 500px !important;
     }
 
@@ -881,4 +883,60 @@ a:hover {
     }
 
   }
+}
+
+/* Channel display */
+
+.channel-display {
+  display: flex;
+  padding: 12px;
+  border-radius: 8px;
+}
+
+.channel-display-btn {
+  width: 180px;
+  height: 40px;
+  margin-top: 7px;
+  border-radius: 3px;
+  border: none;
+}
+
+.channel-display-cover {
+  width: 80px;
+  height: 80px;
+  object-fit: cover;
+  border-radius: 50%;
+}
+
+.channel-display-header {
+  height: 80px;
+}
+
+.channel-display-title {
+  color: white;
+  font-size: 20px;
+  margin-bottom: 0;
+}
+
+.channel-display-info {
+  padding: 12px;
+  height: 80px;
+}
+
+.channel-display:hover {
+  background-color: #373E4D;
+}
+
+.no-chat-selected {
+  width: 800px;
+  height: 94vh;
+  padding: 10px;
+  overflow-y: scroll;
+  background-color: #2E333D;
+  color: white;
+}
+
+.no-chat-selected.text {
+  margin: 45% auto;
+  border: 1px solid white;
 }

@@ -1,3 +1,4 @@
+// -- obsolete
 // reply preview component
 import cancelIcon from '../assets/images/close.png';
 import { React } from "react";

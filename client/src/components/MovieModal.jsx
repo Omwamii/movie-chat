@@ -3,14 +3,17 @@ import useMovieModal from "../z-store/useMovieModal";
 import { movieCardStyles } from "../assets/styles/modal.styles";
 import Modal from '@mui/material/Modal';
 import Box from '@mui/material/Box';
-import { React } from "react";
+import { React, useState } from "react";
 import { toast } from "react-hot-toast";
 import { useAuthContext } from "../context/AuthContext";
+import useJoinedChannels from "../z-store/useJoinedChannels";
 
 export default function MovieModal ({ channels }) {
     const { open, setOpen } = useMovieModal();
     const { selectedMovie } = useMovieModal();
     const { authUser } = useAuthContext();
+    const { joinedChannels, addJoinedChannel } = useJoinedChannels();
+    const [createdChannels, setCreatedChannels] = useState(channels);
 
     // check to provide default movie cover incase movie doesn't have a cover & not assignn when !selectedMovie
     const selectedMovieCover = selectedMovie ?  (selectedMovie.backdrop_path ? 'https://image.tmdb.org/t/p/original' + selectedMovie.backdrop_path : '') : ''
@@ -24,9 +27,10 @@ export default function MovieModal ({ channels }) {
                 title: movie.title,
                 filmId: movie.id,
                 type: type,
-                creatorId: authUser._id
+                creatorId: authUser._id,
+                icon: movie.backdrop_path ? `https://image.tmdb.org/t/p/original/${movie.backdrop_path}` : null,
             }
-            console.log('creating channel', body)
+            // console.log('creating channel', body)
 
             const response = await fetch('api/channels/create', {
                 method: 'POST',
@@ -34,11 +38,15 @@ export default function MovieModal ({ channels }) {
                 body: JSON.stringify(body)
             })
             const data = await response.json();
-            console.log(data);
+            // console.log(data);
     
             if (data.error) {
                 throw new Error(data.error);
             } else {
+                console.log('created channel', data);
+                console.log(createdChannels)
+                setCreatedChannels((prev) => [...prev, data])
+                console.log(createdChannels)
                 toast.success(`New ${type} channel ${movie.title} created`)
             }
         } catch (error) {
@@ -60,11 +68,13 @@ export default function MovieModal ({ channels }) {
                 body: JSON.stringify(body)
             })
             const data = await response.json();
-            console.log(data);
+            // console.log(data);
     
             if (data.error) {
                 throw new Error(data.error);
             } else {
+                console.log('adding new joined channel', data)
+                addJoinedChannel(data);
                 toast.success(`You joined ${movie.title} channel`)
             }
         } catch (error) {
@@ -99,8 +109,13 @@ export default function MovieModal ({ channels }) {
                                 </div>
                             </div>
                             <div className='modal-movie-action'>
-                                {selectedMovie ? ((channels.includes(selectedMovie.id) ? (
-                                    <button className='join-chat-btn' onClick={() => joinMovieChannel(selectedMovie)}>Join chat</button>
+                                {selectedMovie ? ((createdChannels.includes(selectedMovie.id) ? (
+                                    joinedChannels.includes(selectedMovie.id) ? (
+                                        <button className='join-chat-btn' onClick={() => joinMovieChannel(selectedMovie)}>View chat</button>
+                                    ) : (
+                                        <button className='join-chat-btn' onClick={() => joinMovieChannel(selectedMovie)}>Join chat</button>
+                                    )
+                                   
                                 ) : (
                                     <button className='join-chat-btn' onClick={() => createMovieChannel(selectedMovie)}>Create chat</button>
                                 ))) : <></>}

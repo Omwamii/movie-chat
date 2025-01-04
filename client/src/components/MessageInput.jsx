@@ -1,3 +1,4 @@
+// -- obsolete
 // Textbox for message 
 import React, { useEffect, useState } from "react";
 import emoji from '../assets/images/smile.png';
@@ -5,15 +6,24 @@ import sendIcon from '../assets/images/send.png';
 import cancelIcon from '../assets/images/close.png';
 import useEmojiPicker from "../z-store/useEmojiPicker";
 import useChatInput from "../z-store/useChatInput";
+import useSendMessage from "../hooks/useSendMessage";
 
 function MessageInput() {
     const { inputValue, setInputValue }= useChatInput();
     const { showEmojiPicker, setShowEmojiPicker } = useEmojiPicker();
+    const { sendMessage } = useSendMessage();
 
     // Function to handle emoji selection
     function handleSendClicked() {
-        console.log(inputValue);
-        // SEND 
+        sendMessage(inputValue);
+        setInputValue("");
+    }
+
+    function handleKeyPress(event) {
+        if (event.key === "Enter") {
+            sendMessage(inputValue);
+            setInputValue("");
+        }
     }
 
     return (
@@ -29,7 +39,7 @@ function MessageInput() {
                 </div>
 
                 <div className="chat-input-container">
-                    <input  className="chat-input" placeholder="what's up?" value={inputValue} onChange={(e) => setInputValue(e.target.value)}/>
+                    <input  className="chat-input" placeholder="what's up?" value={inputValue} onChange={(e) => setInputValue(e.target.value)} onKeyDown={handleKeyPress}/>
                 </div>
 
                 <div className="send-section">

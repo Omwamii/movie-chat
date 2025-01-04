@@ -10,7 +10,7 @@ export default function SeriesList({ series }) {
 
     const handleOpen = (series) => {
         setSelectedSeries(series)
-        console.log('selected series', series);
+        // console.log('selected series', series);
         setOpen(true);
     }
 

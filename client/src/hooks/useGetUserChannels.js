@@ -1,6 +1,7 @@
 // get channels that user has joined
 
 import { useEffect, useState } from "react"
+import { toast } from "react-hot-toast";
 
 const useGetUserChannels = () => {
     const [loading, setLoading] = useState(false);
@@ -26,6 +27,7 @@ const useGetUserChannels = () => {
 
             } catch (error) {
                 // toast the error
+                toast.error(error.message)
                 console.error(error);
             } finally {
                 setLoading(false);

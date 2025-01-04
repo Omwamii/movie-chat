@@ -1,4 +1,5 @@
 import mongoose  from "mongoose";
+import Message from "./message.model.js";
 
 const ChannelSchema = new mongoose.Schema({
     title: {
@@ -6,7 +7,7 @@ const ChannelSchema = new mongoose.Schema({
         required: true,
         unique: true
     },
-    creatorId: {
+    creator: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "User",
         required: true,
@@ -21,6 +22,9 @@ const ChannelSchema = new mongoose.Schema({
         enum: ['movie', 'series'], // Either a movie channel or series channel
         required: true,
     },
+    icon: {
+        type: String,
+    },
     users: [
         {
             type: mongoose.Schema.Types.ObjectId,
@@ -31,10 +35,25 @@ const ChannelSchema = new mongoose.Schema({
         {
             type: mongoose.Schema.Types.ObjectId,
             ref: "Message",
-            default: [],
         }
     ],
 }, {timestamps: true})
+
+ChannelSchema.virtual('lastTextTime').get(function() {
+    if (this.messages && this.messages.length > 0) {
+      const lastMessage = this.messages[this.messages.length - 1];
+      return lastMessage.timestamp;
+    }
+    return null;
+  });
+  
+  ChannelSchema.virtual('lastText').get(function() {
+    if (this.messages && this.messages.length > 0) {
+      const lastMessage = this.messages[this.messages.length - 1];
+      return lastMessage.text;
+    }
+    return null;
+  });
 
 const Channel = mongoose.model("Channel", ChannelSchema);
 export default Channel;

@@ -1,6 +1,8 @@
 // Navigation
 // import { NavLink } from 'react-router-dom';
 import React, { useState, useRef, useEffect } from "react";
+import { toast } from "react-hot-toast";
+
 import Search from "./Search";
 import MyChannels from "./MyChannels";
 import AllChannels from './AllChannels.jsx';
@@ -19,7 +21,11 @@ import ContentHeader from './ContentHeader';
 import SeriesModal from './SeriesModal';
 import useSeriesModal from '../z-store/useSeriesModal';
 import LoadingSpinner from "./LoadingSpinner";
-import { toast } from "react-hot-toast";
+import JoinChannelDefaultScreen from "./JoinChannelDefaultScreen";
+import NoChatSelected from "./NoChatSelected";
+import useJoinedChannels from "../z-store/useJoinedChannels";
+import useGetJoinedChannels from "../hooks/useGetJoinedChannels";
+
 
 function Home() {
     const [value, setValue] = useState('');
@@ -38,6 +44,11 @@ function Home() {
     const { loading: myChannelsLoading, myChannels } = useGetUserChannels();
     const [seriesChannelsIds, setSeriesChannelsIds] = useState([]);
     const [movieChannelsIds, setmovieChannelsIds] = useState([]);
+    const { selectedChannel, setSelectedChannel } = useChannels();
+    const { joinedChannels }  = useGetJoinedChannels();
+
+    console.log('joined channels', joinedChannels)
+
 
     // const [placeholder, setPlaceholder] = useState("Trending🔥"); // placeholder for <Search /> component, to change with genres
 
@@ -48,7 +59,7 @@ function Home() {
       if (linkRef.current) {
         // click first nav link (show my chats first / on reload )
         linkRef.current.click();
-        console.log('triggering first nav click');
+        // console.log('triggering first nav click');
       }
     }, []);
 
@@ -58,7 +69,7 @@ function Home() {
     }, []);
 
     function handleAllChannelsClicked(event) {
-      console.log(allChannels)
+      // console.log(allChannels)
         
       showContent();
 
@@ -82,7 +93,7 @@ function Home() {
     }
 
     function handleMyChannelsClicked(event) {
-      console.log(myChannels);
+      // console.log(myChannels);
 
       showContent();
 
@@ -190,7 +201,7 @@ function Home() {
         })
         .then((res) => res.json())
         .then((data) => {
-            console.log(data);
+            // console.log(data);
             if (!data.error) {
               setSeriesGenres(data);
             }
@@ -199,7 +210,7 @@ function Home() {
 
     const fetchSeriesByGenre = (event) => {
         const genreId = event.target.id;
-        console.log(event.target.textContent);
+        // console.log(event.target.textContent);
         // setPlaceholder(event.target.textContent);
 
         setIsLoading(true);
@@ -210,7 +221,7 @@ function Home() {
         })
         .then((res) => res.json())
         .then((data) => {
-          console.log(`Fetched series:`, data);
+          // console.log(`Fetched series:`, data);
           if (!data.error) {
             setSeries(data);
           }
@@ -229,7 +240,7 @@ function Home() {
       })
       .then((res) => res.json())
       .then((data) => {
-        console.log(`Fetched Trending series:`, data);
+        // console.log(`Fetched Trending series:`, data);
         if (!data.error) {
           setSeries(data);
         }
@@ -244,7 +255,7 @@ function Home() {
       })
       .then((res) => res.json())
       .then((data) => {
-          console.log(data);
+          // console.log(data);
           if (!data.error) {
             setMoviesGenres(data);
           }
@@ -253,7 +264,7 @@ function Home() {
 
   const fetchMoviesByGenre = (event) => {
       const genreId = event.target.id;
-      console.log(event.target.textContent);
+      // console.log(event.target.textContent);
       // setPlaceholder(event.target.textContent);
 
       setIsLoading(true);
@@ -264,7 +275,7 @@ function Home() {
       })
       .then((res) => res.json())
       .then((data) => {
-        console.log(`Fetched movies:`, data);
+        // console.log(`Fetched movies:`, data);
         if (!data.error) {
           setMovies(data);
         }
@@ -284,7 +295,7 @@ function Home() {
     })
     .then((res) => res.json())
     .then((data) => {
-      console.log(`Fetched Trending series:`, data);
+      // console.log(`Fetched Trending series:`, data);
       if (!data.error) {
         setMovies(data);
       }
@@ -293,6 +304,8 @@ function Home() {
   }
 
   const chat = {
+    messages: [],
+    users: [],  
     total_users: '44',
     online_users: '4',
     title: 'From',
@@ -305,7 +318,7 @@ function Home() {
     })
     .then((res) => res.json())
     .then((data) => {
-      console.log(`Fetched series ids:`, data);
+      // console.log(`Fetched series ids:`, data);
       if (!data.error) {
         setSeriesChannelsIds(data)
       } else {
@@ -321,9 +334,9 @@ function Home() {
     })
     .then((res) => res.json())
     .then((data) => {
-      console.log(`Fetched movies ids:`, data);
+      //console.log(`Fetched movies ids:`, data);
       if (!data.error) {
-        console.log(data)
+        // console.log(data)
         setmovieChannelsIds(data)
       } else {
         toast.error(data.error)
@@ -373,8 +386,8 @@ function Home() {
             </div>
           </div>
           {/* place channels or movie categories here based on navigation link visited */}
-          {showMyChannels && <MyChannels />}
-          {showAllChannels && <AllChannels />}
+          {showMyChannels && <MyChannels channels={myChannels} />}
+          {showAllChannels && <AllChannels channels={allChannels} />}
           {showMovieCategories && (
             <div className="movie-categories">
               {/* movies genres */}
@@ -442,10 +455,11 @@ function Home() {
               <ContentHeader />
               <div>
                 {isLoading ? (<LoadingSpinner />) : (<SeriesList series={series} />)}
-              </div>
+              </div> 
             </div>
           )}
-          {(showMyChannels || showAllChannels) && <Chat chat={chat} />}
+          {showMyChannels && (selectedChannel ? <Chat chat={selectedChannel} /> : <NoChatSelected />)}
+          {showAllChannels && <JoinChannelDefaultScreen />}
         </div>
       </div>
     );

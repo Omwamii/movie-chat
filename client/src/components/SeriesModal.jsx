@@ -24,9 +24,10 @@ export default function SeriesModal ({ channels }) {
                 title: series.name,
                 filmId: series.id,
                 type: type,
-                creatorId: authUser._id
+                creatorId: authUser._id,
+                icon: series.backdrop_path ? `https://image.tmdb.org/t/p/original/${series.backdrop_path}` : null,
             }
-            console.log('creating channel', body)
+            // console.log('creating channel', body)
 
             const response = await fetch('api/channels/create', {
                 method: 'POST',
@@ -34,7 +35,7 @@ export default function SeriesModal ({ channels }) {
                 body: JSON.stringify(body)
             })
             const data = await response.json();
-            console.log(data);
+            // console.log(data);
     
             if (data.error) {
                 throw new Error(data.error);
@@ -60,7 +61,7 @@ export default function SeriesModal ({ channels }) {
                 body: JSON.stringify(body)
             })
             const data = await response.json();
-            console.log(data);
+            // console.log(data);
     
             if (data.error) {
                 throw new Error(data.error);

@@ -1,9 +1,11 @@
+// -- obsolete
 // Component holding messages content
 import React, { useState } from "react";
 import dropDownIconDark from "../assets/images/down-arrow-dark.png";
 import dropDownIconBlue from "../assets/images/down-arrow.png";
 import { useAuthContext } from "../context/AuthContext";
 import useReplyPreview from "../z-store/useReplyPreview";
+import { format } from 'date-fns';
 
 function Message({ message }) {
   const { authUser }  = useAuthContext();
@@ -12,25 +14,27 @@ function Message({ message }) {
   const [inputValue, setInputValue] = useState("");
   const [showPicker, setShowPicker] = useState(false);
   const { setShowReplyPreview } = useReplyPreview();
+  const { deleteMessage } = useDeleteMessage();
 
   // authUser = {
   //   _id: "123",
   // };
 
-  const handleReplyClicked = (event) => {
-    const replyId = event.target.id;
-    const messageId = replyId.split("-")[1];
+  const handleReplyClicked = (message) => {
       //   console.log(`Replying to message id: ${messageId}`);
-    console.log(getMessageDetails(messageId));
-    setMessageReplyingTo(messageId);
+    console.log(message);
+    setMessageReplyingTo(message._id);
     setShowReplyPreview(true);
   }
 
-  const handleDeleteClicked = (event) => {
-    const replyId = event.target.id;
-    const messageId = replyId.split("-")[1];
-    console.log(`Deleting message id: ${messageId}`);
-  }
+  // const handleDeleteClicked = (event) => {
+  //   const replyId = event.target.id;
+  //   const messageId = replyId.split("-")[1];
+  //   console.log(`Deleting message id: ${messageId}`);
+
+  //   // Handle deleting message
+  //   deleteMessage(messageId)
+  // }
 
   const toggleMenu = () => {
     setMenuVisible((prev) => !prev);
@@ -49,7 +53,6 @@ function Message({ message }) {
 
   const showReplyPreview = () => {
     if (!messageReplyingTo) return;
-    // console.log('Showing preview');
     const previewElement = document.getElementsByClassName('reply-preview')[0];
     const replyUser = previewElement.getElementsByClassName('reply-username')[0];
     const replyText = previewElement.getElementsByClassName('reply-preview-text')[0];
@@ -63,60 +66,47 @@ function Message({ message }) {
 }
 
   return (
-    <div
-      // className={`message ${
-      //   message.user_id === authUser._id ? "my-message" : "not-my-message"
-      // }`}
-      // id={message._id}
-
-      className={`message not-my-message`} id={message._id} >
-
+    <div className={`message ${message.sender._id === authUser._id ? "my-message" : "not-my-message"}`} id={message._id}>
       <div className="message-header">
-        <div className="message-owner">{message.username}</div>
+        <div className="message-owner">{message.sender.username}</div>
         <div className="message-actions">
-          <img
-            // src={
-            //   message.user_id === authUser._id
-            //     ? dropDownIconBlue
-            //     : dropDownIconDark
-            // }
-
+          
+          <img alt="reply" className="message-reply-action" onClick={toggleMenu}
             src={
-              dropDownIconBlue
+              message.sender._id === authUser._id
+                ? dropDownIconBlue
+                : dropDownIconDark
             }
-
-            alt="reply"
-            className="message-reply-action"
-            onClick={toggleMenu}
           />
 
           {menuVisible && (
             <div className="dropdown-menu" onMouseLeave={closeMenu}>
               <ul>
-                <li onClick={handleReplyClicked} id={`reply-${message._id}`}>
+                <li onClick={() => handleReplyClicked(message)} id={`reply-${message._id}`}>
                   Reply
                 </li>
-                <li onClick={handleDeleteClicked} id={`delete-${message._id}`}>
+                {/* <li onClick={handleDeleteClicked} id={`delete-${message._id}`}>
                   Delete
-                </li>
+                </li> */}
               </ul>
             </div>
           )}
         </div>
       </div>
+
       {message.reply && (
         <div className="message-reply-body">
           <div className="reply-header">
-            <span className="reply-username">{message.reply.username}</span>
+            <span className="reply-username">{message.reply ? message.reply.username : 'reply username'}</span>
           </div>
           <div className="reply-body">
-            <div className="reply-preview-text">{message.reply.text}</div>
+            <div className="reply-preview-text">{message.reply ? message.reply.text : 'reply text'}</div>
           </div>
         </div>
       )}
       <div className="message-text">{message.text}</div>
       <div className="message-time">
-        <p>{message.time}</p>
+        <p>{format(new Date(message.createdAt), 'hh:mm a')}</p>
       </div>
     </div>
   );

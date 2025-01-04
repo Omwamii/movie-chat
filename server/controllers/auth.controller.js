@@ -50,7 +50,7 @@ export const login = async (req, res) => {
     // login user
     try {
         const {username, password} = req.body;
-        const user = await User.findOne({username})
+        const user = await User.findOne({username}).populate('joinedChannels')
 
         if (!user) {
             return res.status(400).json({error: "Invalid credentials"})

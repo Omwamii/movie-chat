@@ -1,27 +1,33 @@
+import mongoose from "mongoose";
+import User from "./user.model.js";
 
-import mongoose from "mongoose"
 const MessageSchema = new mongoose.Schema({
-    senderId: {
+    sender: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "User", // reference user 
+        ref: "User",
         required: true,
     },
-    // receiverId: if the message is a reply to another message
-    receiverId: {
+    replyTo: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "User", 
-        required: false,
+        ref: "Message",
+        required: false, // if message is a reply
     },
-    channelId: {
+    channel: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Channel",
         required: true,
     },
-    message: {
+    text: {
         type: String,
         required: true,
     },
-}, {timestamps: true});
+    readBy: [
+        {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "User", // track users who have read the message
+        },
+    ],
+}, { timestamps: true });
 
-const Message = mongoose.model("Message", MessageSchema)
-export default Message
+const Message = mongoose.model("Message", MessageSchema);
+export default Message;
