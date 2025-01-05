@@ -15,8 +15,6 @@ export default function ChatHeader({ chat }) {
         if (!navElement.classList.contains('active')) {
             navElement.classList.add('active');
         }
-        // console.log(contentElement);
-        //console.log(navElement);
     }
 
     return (

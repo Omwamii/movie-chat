@@ -23,9 +23,8 @@ import useSeriesModal from '../z-store/useSeriesModal';
 import LoadingSpinner from "./LoadingSpinner";
 import JoinChannelDefaultScreen from "./JoinChannelDefaultScreen";
 import NoChatSelected from "./NoChatSelected";
-import useJoinedChannels from "../z-store/useJoinedChannels";
 import useGetJoinedChannels from "../hooks/useGetJoinedChannels";
-
+import useGetCreatedChannels from "../hooks/useGetCreatedChannels";
 
 function Home() {
     const [value, setValue] = useState('');
@@ -42,12 +41,14 @@ function Home() {
     const [isLoading, setIsLoading] = useState(false);
     const { loading: allChannelsLoading, allChannels } = useGetAllChannels();
     const { loading: myChannelsLoading, myChannels } = useGetUserChannels();
-    const [seriesChannelsIds, setSeriesChannelsIds] = useState([]);
-    const [movieChannelsIds, setmovieChannelsIds] = useState([]);
+    // const [seriesChannelsIds, setSeriesChannelsIds] = useState([]);
+    // const [movieChannelsIds, setmovieChannelsIds] = useState([]);
     const { selectedChannel, setSelectedChannel } = useChannels();
     const { joinedChannels }  = useGetJoinedChannels();
+    const { createdChannels } = useGetCreatedChannels();
 
-    console.log('joined channels', joinedChannels)
+    // console.log('joined channels on home page', joinedChannels)
+    // console.log('created channels', createdChannels)
 
 
     // const [placeholder, setPlaceholder] = useState("Trending🔥"); // placeholder for <Search /> component, to change with genres
@@ -122,7 +123,7 @@ function Home() {
       // link.click();
 
       fetchTrendingMovies();
-      getMoviesChannelIds();
+      // getMoviesChannelIds();
 
       showContent()
 
@@ -151,7 +152,7 @@ function Home() {
       // console.log(link)
       // link.click();
       fetchTrendingSeries();
-      getSeriesChannelIds();
+      // getSeriesChannelIds();
 
       showContent()
 
@@ -311,38 +312,38 @@ function Home() {
     title: 'From',
   }
 
-  const getSeriesChannelIds = () => {
-    fetch(`/api/channels/ids/series`, {
-      method: 'GET',
-      headers: {'Content-Type': 'application/json'},
-    })
-    .then((res) => res.json())
-    .then((data) => {
-      // console.log(`Fetched series ids:`, data);
-      if (!data.error) {
-        setSeriesChannelsIds(data)
-      } else {
-        toast.error(data.error)
-      }
-    })
-  }
+  // const getSeriesChannelIds = () => {
+  //   fetch(`/api/channels/ids/series`, {
+  //     method: 'GET',
+  //     headers: {'Content-Type': 'application/json'},
+  //   })
+  //   .then((res) => res.json())
+  //   .then((data) => {
+  //     // console.log(`Fetched series ids:`, data);
+  //     if (!data.error) {
+  //       setSeriesChannelsIds(data)
+  //     } else {
+  //       toast.error(data.error)
+  //     }
+  //   })
+  // }
 
-  const getMoviesChannelIds = () => {
-    fetch(`/api/channels/ids/movie`, {
-      method: 'GET',
-      headers: {'Content-Type': 'application/json'},
-    })
-    .then((res) => res.json())
-    .then((data) => {
-      //console.log(`Fetched movies ids:`, data);
-      if (!data.error) {
-        // console.log(data)
-        setmovieChannelsIds(data)
-      } else {
-        toast.error(data.error)
-      }
-    })
-  }
+  // const getMoviesChannelIds = () => {
+  //   fetch(`/api/channels/ids/movie`, {
+  //     method: 'GET',
+  //     headers: {'Content-Type': 'application/json'},
+  //   })
+  //   .then((res) => res.json())
+  //   .then((data) => {
+  //     //console.log(`Fetched movies ids:`, data);
+  //     if (!data.error) {
+  //       // console.log(data)
+  //       setmovieChannelsIds(data)
+  //     } else {
+  //       toast.error(data.error)
+  //     }
+  //   })
+  // }
 
     return (
       <div className="container">
@@ -441,7 +442,7 @@ function Home() {
         <div className="content">
           {showMovieCategories && (
             <div className="movie-list">
-              <MovieModal channels={movieChannelsIds} />
+              <MovieModal />
               <ContentHeader />
               <div>
                   {isLoading ? (<LoadingSpinner />) : (<MovieList movies={movies}/>)}
@@ -451,7 +452,7 @@ function Home() {
 
           {showSeriesCategories && (
             <div className="movie-list">
-              <SeriesModal channels={seriesChannelsIds} />
+              <SeriesModal />
               <ContentHeader />
               <div>
                 {isLoading ? (<LoadingSpinner />) : (<SeriesList series={series} />)}

@@ -64,10 +64,6 @@ function Chat({ chat }) {
         }
     }
 
-    chat.messages.forEach(message => {
-        console.log(message);
-    });
-
     return (
         <div className="chat">
             <ChatHeader chat={chat}/>

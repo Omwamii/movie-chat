@@ -19,10 +19,6 @@ export default function Login() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        // Handle login logic here
-        // console.log("Login details:", formData);
-
-        // loginUser();
         await login(formData);
 
     };

@@ -1,19 +1,32 @@
 // modal popup that shows movie information, when the movie is clicked on a movie list
-import useMovieModal from "../z-store/useMovieModal";
 import { movieCardStyles } from "../assets/styles/modal.styles";
 import Modal from '@mui/material/Modal';
 import Box from '@mui/material/Box';
-import { React, useState } from "react";
+import { React, useState, useEffect } from "react";
 import { toast } from "react-hot-toast";
-import { useAuthContext } from "../context/AuthContext";
-import useJoinedChannels from "../z-store/useJoinedChannels";
 
-export default function MovieModal ({ channels }) {
+import { useAuthContext } from "../context/AuthContext";
+
+import useJoinedChannels from "../z-store/useJoinedChannels";
+import useCreatedChannels from "../z-store/useCreatedChannels";
+import useMovieModal from "../z-store/useMovieModal";
+
+export default function MovieModal () {
     const { open, setOpen } = useMovieModal();
     const { selectedMovie } = useMovieModal();
     const { authUser } = useAuthContext();
-    const { joinedChannels, addJoinedChannel } = useJoinedChannels();
-    const [createdChannels, setCreatedChannels] = useState(channels);
+    const { addJoinedChannel } = useJoinedChannels();
+    const { addCreatedChannel } = useCreatedChannels();
+    const createdChannels = useCreatedChannels((state) => state.createdChannels);
+    const joinedChannels = useJoinedChannels((state) => state.joinedChannels);
+    const [localCreatedChannels, setLocalCreatedChannels] = useState([]);
+    const [localJoinedChannels, setLocalJoinedChannels] = useState([]);
+
+    useEffect(() => {
+        // Sync local state with global state
+        setLocalCreatedChannels(createdChannels);
+        setLocalJoinedChannels(joinedChannels);
+    }, [createdChannels, joinedChannels]);
 
     // check to provide default movie cover incase movie doesn't have a cover & not assignn when !selectedMovie
     const selectedMovieCover = selectedMovie ?  (selectedMovie.backdrop_path ? 'https://image.tmdb.org/t/p/original' + selectedMovie.backdrop_path : '') : ''
@@ -43,10 +56,8 @@ export default function MovieModal ({ channels }) {
             if (data.error) {
                 throw new Error(data.error);
             } else {
-                console.log('created channel', data);
-                console.log(createdChannels)
-                setCreatedChannels((prev) => [...prev, data])
-                console.log(createdChannels)
+                await addCreatedChannel(data.filmId)
+                setLocalCreatedChannels((prev) => [...prev, data.filmId])
                 toast.success(`New ${type} channel ${movie.title} created`)
             }
         } catch (error) {
@@ -73,14 +84,18 @@ export default function MovieModal ({ channels }) {
             if (data.error) {
                 throw new Error(data.error);
             } else {
-                console.log('adding new joined channel', data)
-                addJoinedChannel(data);
+                addJoinedChannel(data.filmId);
+                setLocalJoinedChannels((prev) => [...prev, data.filmId])
                 toast.success(`You joined ${movie.title} channel`)
             }
         } catch (error) {
             toast.error(error.message)
             console.error(error)
         }
+    }
+
+    const viewMovieChannel = async (movie) => {
+        console.log('view channel in movie modal')
     }
     
     return (
@@ -109,9 +124,9 @@ export default function MovieModal ({ channels }) {
                                 </div>
                             </div>
                             <div className='modal-movie-action'>
-                                {selectedMovie ? ((createdChannels.includes(selectedMovie.id) ? (
-                                    joinedChannels.includes(selectedMovie.id) ? (
-                                        <button className='join-chat-btn' onClick={() => joinMovieChannel(selectedMovie)}>View chat</button>
+                                {selectedMovie ? ((localCreatedChannels.includes(selectedMovie.id) ? (
+                                    localJoinedChannels.includes(selectedMovie.id) ? (
+                                        <button className='join-chat-btn' onClick={() => viewMovieChannel(selectedMovie)}>View chat</button>
                                     ) : (
                                         <button className='join-chat-btn' onClick={() => joinMovieChannel(selectedMovie)}>Join chat</button>
                                     )

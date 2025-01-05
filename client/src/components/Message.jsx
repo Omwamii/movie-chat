@@ -16,13 +16,7 @@ function Message({ message }) {
   const { setShowReplyPreview } = useReplyPreview();
   const { deleteMessage } = useDeleteMessage();
 
-  // authUser = {
-  //   _id: "123",
-  // };
-
   const handleReplyClicked = (message) => {
-      //   console.log(`Replying to message id: ${messageId}`);
-    console.log(message);
     setMessageReplyingTo(message._id);
     setShowReplyPreview(true);
   }
@@ -43,27 +37,6 @@ function Message({ message }) {
   const closeMenu = () => {
     setMenuVisible(false);
   };
-
-  const getMessageDetails = (messageId) => {
-    const messageElement = document.getElementById(messageId);
-    const name = messageElement.querySelector('.message-owner').textContent;
-    const text = messageElement.querySelector('.message-text').textContent;
-    return {name, text};
-  }
-
-  const showReplyPreview = () => {
-    if (!messageReplyingTo) return;
-    const previewElement = document.getElementsByClassName('reply-preview')[0];
-    const replyUser = previewElement.getElementsByClassName('reply-username')[0];
-    const replyText = previewElement.getElementsByClassName('reply-preview-text')[0];
-    const replyDetails = getMessageDetails(messageReplyingTo);
-    replyUser.textContent = replyDetails.name;
-    replyText.textContent = replyDetails.text;
-    // display the preview section
-    // previewElement.style.display = 'block';
-    previewElement.classList.add('show-reply-preview');
-    console.log(`${replyUser} -> ${replyText}`);
-}
 
   return (
     <div className={`message ${message.sender._id === authUser._id ? "my-message" : "not-my-message"}`} id={message._id}>

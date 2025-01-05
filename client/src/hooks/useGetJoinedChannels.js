@@ -21,7 +21,6 @@ const useGetJoinedChannels = () => {
                 if (data.error) {
                     throw new Error(data.error)
                 }
-                console.log(data)
                 setjoinedChannels(data)
                 
               } catch (error) {

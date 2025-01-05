@@ -4,13 +4,28 @@ import useSeriesModal from "../z-store/useSeriesModal";
 import { useAuthContext } from "../context/AuthContext";
 import Modal from '@mui/material/Modal';
 import Box from '@mui/material/Box';    
-import { React } from "react";
+import { React, useState, useEffect } from "react";
 import { toast } from "react-hot-toast";
 
-export default function SeriesModal ({ channels }) {
+import useJoinedChannels from "../z-store/useJoinedChannels";
+import useCreatedChannels from "../z-store/useCreatedChannels";
+
+export default function SeriesModal () {
     const { open, setOpen } = useSeriesModal();
     const { selectedSeries } = useSeriesModal();
     const { authUser } = useAuthContext();
+    const { addJoinedChannel } = useJoinedChannels();
+    const { addCreatedChannel } = useCreatedChannels();
+    const createdChannels = useCreatedChannels((state) => state.createdChannels);
+    const joinedChannels = useJoinedChannels((state) => state.joinedChannels);
+    const [localCreatedChannels, setLocalCreatedChannels] = useState([]);
+    const [localJoinedChannels, setLocalJoinedChannels] = useState([]);
+
+    useEffect(() => {
+        // Sync local state with global state
+        setLocalCreatedChannels(createdChannels);
+        setLocalJoinedChannels(joinedChannels);
+    }, [createdChannels, joinedChannels]);
 
     // check to provide default movie cover incase movie doesn't have a cover & not assignn when !selectedMovie
     const selectedSeriesCover = selectedSeries ?  (selectedSeries.backdrop_path ? 'https://image.tmdb.org/t/p/original' + selectedSeries.backdrop_path : '') : ''
@@ -40,6 +55,8 @@ export default function SeriesModal ({ channels }) {
             if (data.error) {
                 throw new Error(data.error);
             } else {
+                await addCreatedChannel(data.filmId)
+                setLocalCreatedChannels((prev) => [...prev, data.filmId])
                 toast.success(`New ${type} channel ${series.name} created`)
             }
         } catch (error) {
@@ -66,12 +83,18 @@ export default function SeriesModal ({ channels }) {
             if (data.error) {
                 throw new Error(data.error);
             } else {
+                addJoinedChannel(data.filmId);
+                setLocalJoinedChannels((prev) => [...prev, data.filmId])
                 toast.success(`You joined ${series.name} channel`)
             }
         } catch (error) {
             toast.error(error.message)
             console.error(error)
         }
+    }
+
+    const viewSeriesChannel = (series) => {
+        console.log('join series channel')
     }
 
     return (
@@ -100,8 +123,13 @@ export default function SeriesModal ({ channels }) {
                                 </div>
                             </div>
                             <div className='modal-movie-action'>
-                                {selectedSeries ? ((channels.includes(selectedSeries.id) ? (
-                                    <button className='join-chat-btn' onClick={() => joinSeriesChannel(selectedSeries)}>Join chat</button>
+                            {selectedSeries ? ((localCreatedChannels.includes(selectedSeries.id) ? (
+                                    localJoinedChannels.includes(selectedSeries.id) ? (
+                                        <button className='join-chat-btn' onClick={() => viewSeriesChannel(selectedSeries)}>View chat</button>
+                                    ) : (
+                                        <button className='join-chat-btn' onClick={() => joinSeriesChannel(selectedSeries)}>Join chat</button>
+                                    )
+                                   
                                 ) : (
                                     <button className='join-chat-btn' onClick={() => createSeriesChannel(selectedSeries)}>Create chat</button>
                                 ))) : <></>}

@@ -18,7 +18,7 @@ const useGetUserChannels = () => {
                 const response = await fetch('/api/channels/mine');
 
                 const data = await response.json();
-                console.log('fetched user\'s channels : ', data);
+                // console.log('fetched user\'s channels : ', data);
                 if (data.error) {
                     throw new Error(data.error);
                 }

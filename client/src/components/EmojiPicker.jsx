@@ -20,7 +20,6 @@ export default function EmojiPicker () {
 
     const handleClickedOutside = () => {
         // hide the picker on clicking outside
-        // console.log('clicked outside the picker');
     }
 
     return (

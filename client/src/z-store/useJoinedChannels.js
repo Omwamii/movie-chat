@@ -2,7 +2,7 @@ import { create } from 'zustand';
 import { useAuthContext } from '../context/AuthContext';
 import { toast } from 'react-hot-toast';
 
-const useJoinedChannels = create((set) => ({
+const useJoinedChannels = create((set, get) => ({
     joinedChannels: [],
     setjoinedChannels: (joinedChannels) => set({joinedChannels}),
     addJoinedChannel: (newChannel) => {

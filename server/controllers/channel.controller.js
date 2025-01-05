@@ -130,7 +130,7 @@ export const joinChannel = async (req, res) => {
         await channel.save();
         await user.save();
 
-        return res.status(200).json({ message: "You successfully joined the channel" });
+        return res.status(200).json(channel);
     } catch (error) {
         console.error(error);
         return res.status(500).json({ error: "An error occurred" });
@@ -149,7 +149,7 @@ export const getChannelIds = async(req, res) => {
         const channels = await Channel.find({
             type,
         }).select('filmId -_id')
-        channels.forEach((item) => channelIds.push(item.filmId))
+        channels.forEach((channel) => channelIds.push(channel.filmId))
 
         return res.status(200).json(channelIds)
     } catch (error) {
@@ -166,5 +166,19 @@ export const getUserJoinedChannelsIds = async(req, res) => {
         return res.status(200).json(user.joinedChannels)
     } catch (error) {
         return res.status(500).json({error: "An error occured"})
+    }
+}
+
+export const getCreatedChannelsIds = async(req, res) => {
+    try {
+        const channelIds = []
+        const channels = await Channel.find().select("filmId -_id")
+
+        channels.forEach((channel) => channelIds.push(channel.filmId))
+
+        return res.status(200).json(channelIds)
+    } catch (error) {
+        console.error(error)
+        return res.status(500).json({error: "An error occured fetching all channels"})
     }
 }

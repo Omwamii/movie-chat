@@ -13,7 +13,7 @@ const useGetAllChannels = () => {
                 const response = await fetch('/api/channels/all');
 
                 const data = await response.json();
-                console.log('fetched all channels : ', data);
+                // console.log('fetched all channels : ', data);
 
                 if (data.error) {
                     throw new Error(data.error);

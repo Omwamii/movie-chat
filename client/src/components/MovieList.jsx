@@ -10,7 +10,6 @@ export default function MovieList({ movies }) {
 
     const handleOpen = (movie) => {
         setSelectedMovie(movie)
-        // console.log('selected movie', movie);
         setOpen(true);
     }
 
