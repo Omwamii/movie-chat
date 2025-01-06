@@ -920,7 +920,6 @@ a:hover {
 
 .channel-display-info {
   padding: 12px;
-  height: 80px;
 }
 
 .channel-display:hover {
@@ -931,12 +930,17 @@ a:hover {
   width: 800px;
   height: 94vh;
   padding: 10px;
-  overflow-y: scroll;
+  /* overflow-y: scroll; */
   background-color: #2E333D;
-  color: white;
+  color: #FFFFFF;
+  /* border: 1px solid white; */
 }
 
-.no-chat-selected.text {
+.no-chat-selected .text {
   margin: 45% auto;
-  border: 1px solid white;
+  padding:  10px;
+  text-align: center;
+  width: 50%;
+  color: #FFFFFF;
+  font-size: 20px;
 }
