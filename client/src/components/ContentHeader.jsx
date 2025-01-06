@@ -1,3 +1,4 @@
+// -- obsolete
 // Header component for movies & series display section
 import Search from "./Search";
 import backArrow from "../assets/images/back-arrow.png"

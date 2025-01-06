@@ -25,6 +25,7 @@ import JoinChannelDefaultScreen from "./JoinChannelDefaultScreen";
 import NoChatSelected from "./NoChatSelected";
 import useGetJoinedChannels from "../hooks/useGetJoinedChannels";
 import useGetCreatedChannels from "../hooks/useGetCreatedChannels";
+import backArrow from "../assets/images/back-arrow.png"
 
 function Home() {
     const [value, setValue] = useState('');
@@ -46,6 +47,12 @@ function Home() {
     const { selectedChannel, setSelectedChannel } = useChannels();
     const { joinedChannels }  = useGetJoinedChannels();
     const { createdChannels } = useGetCreatedChannels();
+    const [searchChannelFlag, setSearchChanneFlag] = useState('joined');
+    const [searchFilmType, setSearchFilmType] = useState(null);
+    const [searchGenreId, setSearchGenreId] = useState(null);
+    const [searchPlaceholderGenre, setSearchPlaceholderGenre] = useState('');
+    const [searchChannelIsDisabled, setSearchChannelIsDisabled] = useState(false);
+
 
     // console.log('joined channels on home page', joinedChannels)
     // console.log('created channels', createdChannels)
@@ -55,6 +62,15 @@ function Home() {
 
     const navElement = document.getElementsByClassName('nav')[0];
     const contentElement = document.getElementsByClassName('content')[0];
+
+    const goBack = () => {
+      if (contentElement.classList.contains('active')) {
+          contentElement.classList.remove('active');
+      }
+      if (!navElement.classList.contains('active')) {
+          navElement.classList.add('active');
+      }
+  }
 
     useEffect(() => {
       if (linkRef.current) {
@@ -71,8 +87,11 @@ function Home() {
 
     function handleAllChannelsClicked(event) {
       // console.log(allChannels)
-        
+      if (searchChannelIsDisabled) {
+        setSearchChannelIsDisabled(false)
+      }
       showContent();
+      setSearchChanneFlag('all')
 
         if (activeNavLink) {
             activeNavLink.classList.remove('active');
@@ -95,8 +114,11 @@ function Home() {
 
     function handleMyChannelsClicked(event) {
       // console.log(myChannels);
-
+      if (searchChannelIsDisabled) {
+        setSearchChannelIsDisabled(false)
+      }
       showContent();
+      setSearchChanneFlag('joined')
 
         if (activeNavLink) {
             activeNavLink.classList.remove('active');
@@ -121,10 +143,10 @@ function Home() {
       // const link = document.getElementById('trending-movies-link');
       // console.log(link);
       // link.click();
-
+      setSearchChannelIsDisabled(true)
       fetchTrendingMovies();
       // getMoviesChannelIds();
-
+      setSearchFilmType('movie');
       showContent()
 
         if (activeNavLink) {
@@ -151,8 +173,10 @@ function Home() {
       // const link = document.getElementById('trending-series-link');
       // console.log(link)
       // link.click();
+      setSearchChannelIsDisabled(true)
       fetchTrendingSeries();
       // getSeriesChannelIds();
+      setSearchFilmType('series');
 
       showContent()
 
@@ -209,14 +233,13 @@ function Home() {
         })
     }
 
-    const fetchSeriesByGenre = (event) => {
-        const genreId = event.target.id;
-        // console.log(event.target.textContent);
-        // setPlaceholder(event.target.textContent);
+    const fetchSeriesByGenre = (genre) => {
 
         setIsLoading(true);
+        setSearchGenreId(genre.id)
+        setSearchPlaceholderGenre(genre.name)
 
-        fetch(`/api/series/${genreId}`, {
+        fetch(`/api/series/${genre.id}`, {
           method: 'GET',
           headers: {'Content-Type': 'application/json'},
         })
@@ -232,8 +255,8 @@ function Home() {
 
     const fetchTrendingSeries = () => {
 
-      // setPlaceholder("Trending🔥");
       setIsLoading(true);
+      setSearchPlaceholderGenre('Trending🔥')
 
       fetch(`/api/series/trending`, {
         method: 'GET',
@@ -263,14 +286,12 @@ function Home() {
       })
   }
 
-  const fetchMoviesByGenre = (event) => {
-      const genreId = event.target.id;
-      // console.log(event.target.textContent);
-      // setPlaceholder(event.target.textContent);
-
+  const fetchMoviesByGenre = (genre) => {
       setIsLoading(true);
+      setSearchGenreId(genre.id)
+      setSearchPlaceholderGenre(genre.name)
 
-      fetch(`/api/movies/${genreId}`, {
+      fetch(`/api/movies/${genre.id}`, {
         method: 'GET',
         headers: {'Content-Type': 'application/json'},
       })
@@ -286,9 +307,8 @@ function Home() {
 
   const fetchTrendingMovies = () => {
 
-    // setPlaceholder("Trending🔥");
-
     setIsLoading(true);
+    setSearchPlaceholderGenre('Trending🔥')
 
     fetch(`/api/movies/trending`, {
       method: 'GET',
@@ -302,14 +322,6 @@ function Home() {
       }
     })
     .finally(() => setIsLoading(false))
-  }
-
-  const chat = {
-    messages: [],
-    users: [],  
-    total_users: '44',
-    online_users: '4',
-    title: 'From',
   }
 
   // const getSeriesChannelIds = () => {
@@ -349,7 +361,7 @@ function Home() {
       <div className="container">
         <div className="nav active">
           <div className="search-channels">
-            <Search />
+            <Search channelsFlag={searchChannelFlag} placeholder={'Search channels'} isDisabled={searchChannelIsDisabled}/>
           </div>
           <div className="nav-channels">
             <div className="nav-channels-single">
@@ -405,7 +417,7 @@ function Home() {
                     className="movie-category"
                     id={genre.id}
                     key={genre.id}
-                    onClick={fetchMoviesByGenre}
+                    onClick={() => fetchMoviesByGenre(genre)}
                   >
                     {genre.name}
                   </div>
@@ -430,7 +442,7 @@ function Home() {
                     className="movie-category"
                     id={genre.id}
                     key={genre.id}
-                    onClick={fetchSeriesByGenre}
+                    onClick={() => fetchSeriesByGenre(genre)}
                   >
                     {genre.name}
                   </div>
@@ -443,7 +455,15 @@ function Home() {
           {showMovieCategories && (
             <div className="movie-list">
               <MovieModal />
-              <ContentHeader />
+              {/* <ContentHeader /> */}
+              <div className="movie-list-header">
+                  <div className="back-arrow-content">
+                      <img src={backArrow} alt='back'className='back-arrow-icon' onClick={goBack}/>
+                  </div>
+                  <div className="search-content">
+                      <Search placeholder={`Search ${searchPlaceholderGenre.toLocaleLowerCase()} movies`} genreId={searchGenreId} filmType={searchFilmType}/>
+                  </div>
+              </div>
               <div>
                   {isLoading ? (<LoadingSpinner />) : (<MovieList movies={movies}/>)}
               </div>
@@ -453,7 +473,15 @@ function Home() {
           {showSeriesCategories && (
             <div className="movie-list">
               <SeriesModal />
-              <ContentHeader />
+              {/* <ContentHeader /> */}
+              <div className="movie-list-header">
+                  <div className="back-arrow-content">
+                      <img src={backArrow} alt='back'className='back-arrow-icon' onClick={goBack}/>
+                  </div>
+                  <div className="search-content">
+                      <Search placeholder={`Search ${searchPlaceholderGenre.toLowerCase()} series`} genreId={searchGenreId} filmType={searchFilmType}/>
+                  </div>
+              </div>
               <div>
                 {isLoading ? (<LoadingSpinner />) : (<SeriesList series={series} />)}
               </div> 

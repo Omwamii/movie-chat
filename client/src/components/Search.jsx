@@ -1,7 +1,22 @@
 // search component
 import { React } from "react";
 
-function Search ({ placeholder }) {
+function Search ({ placeholder, channelsFlag, filmType, genreId, isDisabled}) {
+    if (channelsFlag) {
+        if (channelsFlag === 'all') {
+            console.log('searching all channels')
+        } else if (channelsFlag === 'joined') {
+            console.log('searching in joined channels');
+        }
+    }
+
+    if (filmType) {
+        console.log('film type', filmType)
+    }
+
+    if (genreId) {
+        console.log('genre id', genreId)
+    }
 
     return (
             <div className="group">
@@ -16,8 +31,9 @@ function Search ({ placeholder }) {
                     id="query"
                     className="input"
                     type="search"
-                    placeholder={`Search ${placeholder ? placeholder : 'channels'}`}
+                    placeholder={placeholder ? placeholder : 'Search channels'}
                     name="searchbar"
+                    disabled={isDisabled}
                 />
             </div>
     )
