@@ -54,7 +54,7 @@ function AllChannels() {
     {loading ? (<LoadingSpinner />) : channels.map((channel) => (
         <div className="channel-display" id={channel.filmId}>
             <div className="channel-display-header">
-                <img src={channel.icon} className="channel-display-cover"/>
+                <img src={channel.icon} className="channel-display-cover" loading="lazy"/>
             </div>
             <div className="channel-display-info">
                 <div className="channel-display-title">{channel.title}</div>

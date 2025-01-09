@@ -12,7 +12,7 @@ export default function Channel ({ channel }) {
     return (
         <div className={`list-channel ${isSelected ? 'selected' : ''}`} onClick={() => setSelectedChannel(channel)} >
             <div className="list-channel-image">
-                <img src={channel.icon} className="channel-movie-cover"/>
+                <img src={channel.icon} className="channel-movie-cover" loading="lazy"/>
             </div>
             <div className="list-channel-text-info">
             <div className="channel-header">

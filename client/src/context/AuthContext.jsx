@@ -6,13 +6,6 @@ export const useAuthContext = () => {
     return useContext(AuthContext);
 }
 
-export const updateUserJoinedChannels = (channelId) => {
-    const [authUser, setAuthUser] = useState(JSON.parse(localStorage.getItem("user")) || null);
-    const user = authUser;
-    user.joinedChannels.push(channelId);
-    localStorage.setItem('user', JSON.stringify(user))
-}
-
 export const AuthContextProvider = ({ children }) => {
     const [authUser, setAuthUser] = useState(JSON.parse(localStorage.getItem("user")) || null);
 
