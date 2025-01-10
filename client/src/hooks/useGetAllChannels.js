@@ -7,6 +7,7 @@ const useGetAllChannels = () => {
     const [channels, setChannels] = useState([])
 
     useEffect(() => {
+        console.log('getting all channels')
         const getAllChannels = async () => {
             setLoading(true);
             try {
@@ -19,6 +20,7 @@ const useGetAllChannels = () => {
                     throw new Error(data.error);
                 }
 
+                console.log('all channels get', data)
                 setChannels(data);
 
             } catch (error) {
@@ -32,7 +34,7 @@ const useGetAllChannels = () => {
         getAllChannels();
     }, [])
 
-    return { loading, channels };
+    return { loading, channels, setChannels};
 }
 
 export default useGetAllChannels

@@ -6,8 +6,7 @@ import { useAuthContext } from "../context/AuthContext";
 import { toast } from "react-hot-toast";
 import useJoinedChannels from "../z-store/useJoinedChannels";
 
-function AllChannels() {
-  const { loading, channels } = useGetAllChannels();
+function AllChannels({ channels, loading }) {
   const { authUser } = useAuthContext();
 
   const { addJoinedChannel } = useJoinedChannels();
@@ -52,7 +51,7 @@ function AllChannels() {
   return (
     <div className="list-channels">
     {loading ? (<LoadingSpinner />) : channels.map((channel) => (
-        <div className="channel-display" id={channel.filmId}>
+        <div className="channel-display" id={channel.filmId} key={channel._id}>
             <div className="channel-display-header">
                 <img src={channel.icon} className="channel-display-cover" loading="lazy"/>
             </div>

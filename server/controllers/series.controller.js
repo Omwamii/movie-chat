@@ -20,14 +20,8 @@ export const getSeriesGenres = async (req, res) => {
 
 export const searchSeriesByGenre = async (req, res) => {
     const { query, genre } = req.body;
-    const IMAGE_BASE_URL = "https://image.tmdb.org/t/p/original"
     const API_KEY = process.env.TMDB_API_KEY;
     const API_TOKEN = process.env.TMDB_READ_ACCESS_TOKEN;
-
-    // console.log(query);
-    // console.log(req.body);
-
-    // console.log("Searching movie");
 
     try {
         const response = await axios.get(`https://api.themoviedb.org/3/search/tv`, {
@@ -35,7 +29,7 @@ export const searchSeriesByGenre = async (req, res) => {
                 Authorization: `Bearer ${API_TOKEN}`,
                 accept: 'application/json',
             },
-            params: {
+            params: { 
                 api_key: API_KEY,
                 query,
             }
@@ -58,7 +52,6 @@ export const searchSeriesByGenre = async (req, res) => {
 export const getTrendingSeries = async (req, res) => {
     const media_type = 'tv'; // get trending tv series only
     const time_window = 'week'; // series trending in the current week
-    const IMAGE_BASE_URL = "https://image.tmdb.org/t/p/original"
     const API_KEY = process.env.TMDB_API_KEY;
 
     try {
@@ -77,7 +70,6 @@ export const getTrendingSeries = async (req, res) => {
 
 export const getSeriesByGenre = async (req, res) => {
     const { id: genreId } = req.params;
-    const IMAGE_BASE_URL = "https://image.tmdb.org/t/p/original"
     const API_KEY = process.env.TMDB_API_KEY;
 
     try {

@@ -11,10 +11,6 @@ const useGetUserChannels = () => {
         const getUserChannels = async () => {
             setLoading(true);
             try {
-                // const userId = JSON.parse(localStorage.getItem('user'))._id
-                // if (!userId) {
-                //     throw new Error('Invalid User id');
-                // }
                 const response = await fetch('/api/channels/mine');
 
                 const data = await response.json();
@@ -26,7 +22,6 @@ const useGetUserChannels = () => {
                 setChannels(data);
 
             } catch (error) {
-                // toast the error
                 toast.error(error.message)
                 console.error(error);
             } finally {
@@ -36,7 +31,7 @@ const useGetUserChannels = () => {
         getUserChannels();
     }, [])
 
-    return { loading, channels }
+    return { loading, channels, setChannels }
 }
 
 export default useGetUserChannels;

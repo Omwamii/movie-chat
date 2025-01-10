@@ -1,13 +1,8 @@
 // Navigation
 // import { NavLink } from 'react-router-dom';
 import React, { useState, useRef, useEffect } from "react";
-import { toast } from "react-hot-toast";
-
-import Search from "./Search";
-import MyChannels from "./MyChannels";
+import Channel from "./Channel";
 import AllChannels from './AllChannels.jsx';
-import MovieCategories from "./MovieCategories.jsx";
-import SeriesCategories from "./SeriesCategories.jsx"
 import MovieList from './MovieList';
 import Chat from './Chat';
 import SeriesList from './SeriesList';
@@ -15,20 +10,19 @@ import useGetAllChannels from '../hooks/useGetAllChannels';
 import useGetUserChannels from '../hooks/useGetUserChannels.js';
 import useChannels from '../z-store/useChannels';
 // import SyncLoader from "react-spinners/SyncLoader";
-import useMovieModal from '../z-store/useMovieModal';
 import MovieModal from './MovieModal';
-import ContentHeader from './ContentHeader';
 import SeriesModal from './SeriesModal';
-import useSeriesModal from '../z-store/useSeriesModal';
 import LoadingSpinner from "./LoadingSpinner";
 import JoinChannelDefaultScreen from "./JoinChannelDefaultScreen";
 import NoChatSelected from "./NoChatSelected";
 import useGetJoinedChannels from "../hooks/useGetJoinedChannels";
 import useGetCreatedChannels from "../hooks/useGetCreatedChannels";
 import backArrow from "../assets/images/back-arrow.png"
+import useSearchChannels from "../hooks/useSearchChannels";
+import useSearchMovies from "../hooks/useSearchMovies";
+import useSearchSeries from "../hooks/useSearchSeries";
 
 function Home() {
-    const [value, setValue] = useState('');
     const [showMyChannels, setShowMyChannels] = useState(true);
     const [showAllChannels, setShowAllChannels] = useState(false);
     const [showMovieCategories, setShowMovieCategories] = useState(false);
@@ -40,23 +34,21 @@ function Home() {
     const [seriesGenres, setSeriesGenres] = useState([]);
     const [moviesGenres, setMoviesGenres] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
-    const { loading: allChannelsLoading, allChannels } = useGetAllChannels();
-    const { loading: myChannelsLoading, myChannels } = useGetUserChannels();
-    // const [seriesChannelsIds, setSeriesChannelsIds] = useState([]);
-    // const [movieChannelsIds, setmovieChannelsIds] = useState([]);
-    const { selectedChannel, setSelectedChannel } = useChannels();
+    const { loading: allChannelsLoading, channels: allChannels, setChannels: setAllChannels } = useGetAllChannels();
+    const { loading: myChannelsLoading, channels: myChannels, setChannels: setUserChannels } = useGetUserChannels();
+    const { selectedChannel } = useChannels();
     const { joinedChannels }  = useGetJoinedChannels();
     const { createdChannels } = useGetCreatedChannels();
     const [searchChannelFlag, setSearchChanneFlag] = useState('joined');
-    const [searchFilmType, setSearchFilmType] = useState(null);
     const [searchGenreId, setSearchGenreId] = useState(null);
     const [searchPlaceholderGenre, setSearchPlaceholderGenre] = useState('');
     const [searchChannelIsDisabled, setSearchChannelIsDisabled] = useState(false);
-
-
-    // console.log('joined channels on home page', joinedChannels)
-    // console.log('created channels', createdChannels)
-
+    const [query, setChannelsQuery] = useState("");
+    const [movieQuery, setMoviesQuery] = useState("");
+    const [seriesQuery, setSeriesQuery] = useState("");
+    const { loading: channelsSearchLoading, search } = useSearchChannels();
+    const { loading: movieSearchLoading, searchMoviesFn } = useSearchMovies();
+    const { loading: seriesSearchLoading, searchSeriesFn } = useSearchSeries();
 
     // const [placeholder, setPlaceholder] = useState("Trending🔥"); // placeholder for <Search /> component, to change with genres
 
@@ -146,7 +138,6 @@ function Home() {
       setSearchChannelIsDisabled(true)
       fetchTrendingMovies();
       // getMoviesChannelIds();
-      setSearchFilmType('movie');
       showContent()
 
         if (activeNavLink) {
@@ -176,7 +167,6 @@ function Home() {
       setSearchChannelIsDisabled(true)
       fetchTrendingSeries();
       // getSeriesChannelIds();
-      setSearchFilmType('series');
 
       showContent()
 
@@ -297,7 +287,6 @@ function Home() {
       })
       .then((res) => res.json())
       .then((data) => {
-        // console.log(`Fetched movies:`, data);
         if (!data.error) {
           setMovies(data);
         }
@@ -316,7 +305,6 @@ function Home() {
     })
     .then((res) => res.json())
     .then((data) => {
-      // console.log(`Fetched Trending series:`, data);
       if (!data.error) {
         setMovies(data);
       }
@@ -324,44 +312,75 @@ function Home() {
     .finally(() => setIsLoading(false))
   }
 
-  // const getSeriesChannelIds = () => {
-  //   fetch(`/api/channels/ids/series`, {
-  //     method: 'GET',
-  //     headers: {'Content-Type': 'application/json'},
-  //   })
-  //   .then((res) => res.json())
-  //   .then((data) => {
-  //     // console.log(`Fetched series ids:`, data);
-  //     if (!data.error) {
-  //       setSeriesChannelsIds(data)
-  //     } else {
-  //       toast.error(data.error)
-  //     }
-  //   })
-  // }
+  const handleChannelsInputChange = (e) => {
+    const value = e.target.value;
+    setChannelsQuery(value);
+    }
 
-  // const getMoviesChannelIds = () => {
-  //   fetch(`/api/channels/ids/movie`, {
-  //     method: 'GET',
-  //     headers: {'Content-Type': 'application/json'},
-  //   })
-  //   .then((res) => res.json())
-  //   .then((data) => {
-  //     //console.log(`Fetched movies ids:`, data);
-  //     if (!data.error) {
-  //       // console.log(data)
-  //       setmovieChannelsIds(data)
-  //     } else {
-  //       toast.error(data.error)
-  //     }
-  //   })
-  // }
+  function searchChannels (event){
+    if (event.key === 'Enter') {
+      console.log('searching channels')
+      console.log(searchChannelFlag)
+
+      if (searchChannelFlag === 'joined') {
+        search(query, searchChannelFlag, setUserChannels)
+      } else if (searchChannelFlag === 'all') {
+        search(query, searchChannelFlag, setAllChannels)
+      }
+
+    }
+  }
+
+  const handleMoviesInputChange = (e) => {
+    const value = e.target.value;
+    setMoviesQuery(value)
+  }
+
+  function searchMovies (event) {
+    if (event.key === 'Enter') {
+      console.log('searching movies')
+      console.log(movieQuery)
+      searchMoviesFn(movieQuery, searchGenreId, setMovies)
+    }
+  }
+
+  const handleSeriesInputChange = (e) => {
+    const value = e.target.value;
+    setSeriesQuery(value)
+  }
+
+  function searchSeries (event) {
+    if (event.key === 'Enter') {
+      console.log('searching series')
+      console.log(seriesQuery)
+      searchSeriesFn(seriesQuery, searchGenreId, setSeries)
+    }
+  }
 
     return (
       <div className="container">
         <div className="nav active">
           <div className="search-channels">
-            <Search channelsFlag={searchChannelFlag} placeholder={'Search channels'} isDisabled={searchChannelIsDisabled}/>
+            <div className="group">
+                <svg viewBox="0 0 24 24" aria-hidden="true" className="search-icon">
+                <g>
+                    <path
+                        d="M21.53 20.47l-3.66-3.66C19.195 15.24 20 13.214 20 11c0-4.97-4.03-9-9-9s-9 4.03-9 9 4.03 9 9 9c2.215 0 4.24-.804 5.808-2.13l3.66 3.66c.147.146.34.22.53.22s.385-.073.53-.22c.295-.293.295-.767.002-1.06zM3.5 11c0-4.135 3.365-7.5 7.5-7.5s7.5 3.365 7.5 7.5-3.365 7.5-7.5 7.5-7.5-3.365-7.5-7.5z"
+                    ></path>
+                </g>
+                </svg>
+                <input
+                    id="query"
+                    className="input"
+                    type="search"
+                    placeholder='Search channels'
+                    name="searchbar"
+                    disabled={searchChannelIsDisabled}
+                    value={query}
+                    onChange={handleChannelsInputChange}
+                    onKeyDown={searchChannels}
+                />
+            </div>
           </div>
           <div className="nav-channels">
             <div className="nav-channels-single">
@@ -399,8 +418,15 @@ function Home() {
             </div>
           </div>
           {/* place channels or movie categories here based on navigation link visited */}
-          {showMyChannels && <MyChannels channels={myChannels} />}
-          {showAllChannels && <AllChannels channels={allChannels} />}
+          {/* {showMyChannels && <MyChannels channels={myChannels} loading={myChannelsLoading} />} */}
+          {showMyChannels && (
+            <div className="list-channels">
+              {myChannelsLoading || !myChannels ? (<LoadingSpinner />) : myChannels.map((channel) => (
+                <Channel channel={channel} key={channel._id}/>  
+              ))}
+            </div>
+          )}
+          {showAllChannels && <AllChannels channels={allChannels} loading={allChannelsLoading} />}
           {showMovieCategories && (
             <div className="movie-categories">
               {/* movies genres */}
@@ -461,7 +487,25 @@ function Home() {
                       <img src={backArrow} alt='back'className='back-arrow-icon' onClick={goBack}/>
                   </div>
                   <div className="search-content">
-                      <Search placeholder={`Search ${searchPlaceholderGenre.toLocaleLowerCase()} movies`} genreId={searchGenreId} filmType={searchFilmType}/>
+                      <div className="group">
+                          <svg viewBox="0 0 24 24" aria-hidden="true" className="search-icon">
+                          <g>
+                              <path
+                                  d="M21.53 20.47l-3.66-3.66C19.195 15.24 20 13.214 20 11c0-4.97-4.03-9-9-9s-9 4.03-9 9 4.03 9 9 9c2.215 0 4.24-.804 5.808-2.13l3.66 3.66c.147.146.34.22.53.22s.385-.073.53-.22c.295-.293.295-.767.002-1.06zM3.5 11c0-4.135 3.365-7.5 7.5-7.5s7.5 3.365 7.5 7.5-3.365 7.5-7.5 7.5-7.5-3.365-7.5-7.5z"
+                              ></path>
+                          </g>
+                          </svg>
+                          <input
+                              id="query"
+                              className="input"
+                              type="search"
+                              placeholder={`Search ${searchPlaceholderGenre.toLowerCase()} series`}
+                              name="searchbar"
+                              value={movieQuery}
+                              onChange={handleMoviesInputChange}
+                              onKeyDown={searchMovies}
+                          />
+                      </div>
                   </div>
               </div>
               <div>
@@ -479,7 +523,25 @@ function Home() {
                       <img src={backArrow} alt='back'className='back-arrow-icon' onClick={goBack}/>
                   </div>
                   <div className="search-content">
-                      <Search placeholder={`Search ${searchPlaceholderGenre.toLowerCase()} series`} genreId={searchGenreId} filmType={searchFilmType}/>
+                      <div className="group">
+                          <svg viewBox="0 0 24 24" aria-hidden="true" className="search-icon">
+                          <g>
+                              <path
+                                  d="M21.53 20.47l-3.66-3.66C19.195 15.24 20 13.214 20 11c0-4.97-4.03-9-9-9s-9 4.03-9 9 4.03 9 9 9c2.215 0 4.24-.804 5.808-2.13l3.66 3.66c.147.146.34.22.53.22s.385-.073.53-.22c.295-.293.295-.767.002-1.06zM3.5 11c0-4.135 3.365-7.5 7.5-7.5s7.5 3.365 7.5 7.5-3.365 7.5-7.5 7.5-7.5-3.365-7.5-7.5z"
+                              ></path>
+                          </g>
+                          </svg>
+                          <input
+                              id="query"
+                              className="input"
+                              type="search"
+                              placeholder={`Search ${searchPlaceholderGenre.toLowerCase()} series`}
+                              name="searchbar"
+                              value={seriesQuery}
+                              onChange={handleSeriesInputChange}
+                              onKeyDown={searchSeries}
+                          />
+                      </div>
                   </div>
               </div>
               <div>

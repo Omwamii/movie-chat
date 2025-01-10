@@ -26,7 +26,7 @@ export const createChannel = async (req, res) => {
         await newChannel.save()
         return res.status(201).json(newChannel)
     } catch (error) {
-        console.log(error.message)
+        console.log(error)
         return res.status(500).json({error: "An error occured creating the channel"})
     }
 }
@@ -39,7 +39,7 @@ export const deleteChannel = async (req, res) => {
         })
         return res.status(200).json({message: 'Channel deleted successfully'})
     } catch (error) {
-        console.log(error.message)
+        console.log(error)
         res.status(500).json({error: "An error occured deleting the channel"})
     }
 }
@@ -54,7 +54,7 @@ export const getAllChannels = async (req, res) => {
 
         return res.status(200).json(channels);
     } catch (error) {
-        console.error(error.message);
+        console.error(error);
         return res.status(500).json({ error: "An error occurred getting channels" });
     }
 };
@@ -93,7 +93,7 @@ export const getMyChannels = async (req, res) => {
 
         return res.status(200).json(channels);
     } catch (error) {
-        console.error(error.message);
+        console.error(error);
         return res.status(500).json({ error: "An error occured getting user's channels "});
     }
 };
@@ -153,6 +153,7 @@ export const getChannelIds = async(req, res) => {
 
         return res.status(200).json(channelIds)
     } catch (error) {
+        console.error(error)
         return res.status(500).json({error: "An error occured"})
     }
 }
@@ -165,6 +166,7 @@ export const getUserJoinedChannelsIds = async(req, res) => {
         })
         return res.status(200).json(user.joinedChannels)
     } catch (error) {
+        console.error(error)
         return res.status(500).json({error: "An error occured"})
     }
 }
@@ -182,3 +184,79 @@ export const getCreatedChannelsIds = async(req, res) => {
         return res.status(500).json({error: "An error occured fetching all channels"})
     }
 }
+
+export const searchChannels = async (req, res) => {
+    try {
+        const { query, flag, userId } = req.body;
+        console.log(req.body)
+
+        if (!query) {
+            return res.status(400).json({ error: "Search query is required" });
+        }
+
+        let channels = [];
+
+        if (flag === "all") {
+            channels = await Channel.find({
+                title: { $regex: query, $options: "i" },
+            })
+
+        } else if (flag === "joined") {
+            const user = await User.findById(userId)
+
+            // console.log(user)
+            // console.log(user.joinedChannels)
+
+            if (!user) {
+                return res.status(404).json({ error: "User not found" });
+            }
+
+            const joinedChannels = []
+            for (const channelFilmId of user.joinedChannels){
+                const joinedChannel = await Channel.findOne({
+                    filmId: channelFilmId
+                })
+                .lean({ virtuals: true })
+                .populate({
+                        path: "messages",
+                        populate: [
+                            { path: "sender", select: "username" },
+                            { path: "replyTo", populate: {
+                                path: "sender",
+                                select: "username _id"
+                            }},
+                        ],
+                    })
+
+                if (joinedChannel && joinedChannel.title.toLowerCase().includes(query.toLowerCase())) {
+                    const unreadCount = await Message.countDocuments({
+                        channel: joinedChannel._id,
+                        readBy: { $ne: userId },
+                    });
+
+                    joinedChannel.unreadCount = unreadCount;
+        
+                    if (joinedChannel.messages && joinedChannel.messages.length > 0) {
+                        const lastMessage = joinedChannel.messages[joinedChannel.messages.length - 1];
+                        joinedChannel.lastMessage = lastMessage;
+                    }
+
+                    console.log(joinedChannel.unreadCount)
+
+                    joinedChannels.push(joinedChannel)
+                }
+            }
+
+            channels = joinedChannels
+            console.log(channels)
+
+        } else {
+            return res.status(400).json({ error: "Invalid channel type" });
+        }
+
+        return res.status(200).json(channels);
+    } catch (error) {
+        console.error(error.message);
+        return res.status(500).json({ error: "A search error occurred" });
+    }
+};

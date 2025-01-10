@@ -2,7 +2,6 @@
 import * as React from 'react';
 import SeriesModal from './SeriesModal';
 import useSeriesModal from '../z-store/useSeriesModal';
-import ContentHeader from './ContentHeader';
 
 export default function SeriesList({ series }) {
     const { setOpen } = useSeriesModal();

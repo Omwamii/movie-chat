@@ -2,7 +2,6 @@
 import * as React from 'react';
 import useMovieModal from '../z-store/useMovieModal';
 import MovieModal from './MovieModal';
-import ContentHeader from './ContentHeader';
 
 export default function MovieList({ movies }) {
     const { setOpen } = useMovieModal();
