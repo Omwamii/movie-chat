@@ -11,7 +11,7 @@ const useSearchSeries = () => {
             const response = await fetch('/api/series/search', {
                 method: 'POST',
                 headers: {'Content-Type': 'application/json'},
-                body: JSON.parse({
+                body: JSON.stringify({
                     query,
                     genre
                 })

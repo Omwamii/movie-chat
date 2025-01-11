@@ -11,7 +11,7 @@ const useSearchMovies = () => {
             const response = await fetch('/api/movies/search', {
                 method: 'POST',
                 headers: {'Content-Type': 'application/json'},
-                body: JSON.parse({
+                body: JSON.stringify({
                     query,
                     genre
                 })

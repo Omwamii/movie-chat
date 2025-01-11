@@ -1,6 +1,6 @@
 // Displays the group chat messages
 import ChatHeader from "./ChatHeader";
-import { React, useState } from "react";
+import { React, useEffect, useState } from "react";
 import useEmojiPicker from '../z-store/useEmojiPicker';
 import Picker from "@emoji-mart/react";
 import data from "@emoji-mart/data";
@@ -13,6 +13,8 @@ import cancelIcon from '../assets/images/close.png';
 import emoji from '../assets/images/smile.png';
 import sendIcon from '../assets/images/send.png';
 import useSendMessage from "../hooks/useSendMessage";
+import useGetMessages from "../hooks/useGetMessages";
+import LoadingSpinner from "./LoadingSpinner";
 
 function Chat({ chat }) {
     const { showEmojiPicker,  setShowEmojiPicker } = useEmojiPicker();
@@ -20,9 +22,16 @@ function Chat({ chat }) {
     const { setInputValue, inputValue } = useChatInput();
     const { authUser }  = useAuthContext();
     const [messageReplyingTo, setMessageReplyingTo] = useState(null);
-    const [showPicker, setShowPicker] = useState(false);
+    // const [showPicker, setShowPicker] = useState(false);
     const [showReplyPreview, setShowReplyPreview]  = useState(false);
     const [activeMessageId, setActiveMessageId] = useState(null); // to toggle menu for current message clicked on
+    const { loading, getMessages } = useGetMessages();
+    const [messages, setMessages ] = useState([]);
+
+    useEffect(() => {
+        console.log('getting channel messages')
+        getMessages(chat._id, setMessages)
+    }, [])
 
     const handleEmojiSelect = (emoji) => {
         const updatedInput = inputValue + emoji.native;
@@ -68,7 +77,7 @@ function Chat({ chat }) {
         <div className="chat">
             <ChatHeader chat={chat}/>
             <div className="chat-canvas">
-            {chat.messages.map((message) => (
+            {/* {loading ? <LoadingSpinner /> : messages.map((message) => (
                 <div className={`message ${message.sender._id === authUser._id ? "my-message" : "not-my-message"}`} id={message._id} key={message._id}>
                     <div className="message-header">
                         <div className="message-owner">{message.sender.username}</div>
@@ -88,9 +97,7 @@ function Chat({ chat }) {
                                 <li onClick={() => handleReplyClicked(message)} id={`reply-${message._id}`}>
                                 Reply
                                 </li>
-                                {/* <li onClick={handleDeleteClicked} id={`delete-${message._id}`}>
-                                Delete
-                                </li> */}
+                               
                             </ul>
                             </div>
                         ) : <></>}
@@ -112,7 +119,7 @@ function Chat({ chat }) {
                         <p>{format(new Date(message.createdAt), 'hh:mm a')}</p>
                     </div>
                     </div>
-            ))}
+            ))} */}
 
             </div>
 

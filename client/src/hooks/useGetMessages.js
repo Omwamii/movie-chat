@@ -3,31 +3,20 @@ import { useState } from "react"
 import { toast } from "react-hot-toast";
 import { useAuthContext } from "../context/AuthContext";
 
-const useSearchChannels = () => {
+const useGetMessages = () => {
     const [loading, setLoading] = useState(false);
-    const { authUser } = useAuthContext();
 
-    const search = async (query, flag, setChannels) => {
+    const getMessages = async (channelId, setMessages) => {
         setLoading(true);
         try {
-            const response = await fetch('/api/channels/search', {
-                method: 'POST',
-                headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify({
-                    query,
-                    flag,
-                    userId: authUser._id
-                })
-            });
+            const response = await fetch(`/api/messages/${channelId}`);
             const data = await response.json();
             // console.log('fetched all channels : ', data);
             if (data.error) {        
                 throw new Error(data.error);
             }
-
-            console.log(`Searched channels ${flag}`, data)
             
-            setChannels(data);
+            setMessages(data);
         } catch (error) {
             toast.error(error.message)
             console.error(error);
@@ -36,7 +25,7 @@ const useSearchChannels = () => {
         }
     }
 
-    return { loading, search };
+    return { loading, getMessages };
 }
 
-export default useSearchChannels
+export default useGetMessages;

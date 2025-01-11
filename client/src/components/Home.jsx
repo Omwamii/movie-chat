@@ -15,8 +15,8 @@ import SeriesModal from './SeriesModal';
 import LoadingSpinner from "./LoadingSpinner";
 import JoinChannelDefaultScreen from "./JoinChannelDefaultScreen";
 import NoChatSelected from "./NoChatSelected";
-import useGetJoinedChannels from "../hooks/useGetJoinedChannels";
-import useGetCreatedChannels from "../hooks/useGetCreatedChannels";
+// import useGetJoinedChannels from "../hooks/useGetJoinedChannels";
+// import useGetCreatedChannels from "../hooks/useGetCreatedChannels";
 import backArrow from "../assets/images/back-arrow.png"
 import useSearchChannels from "../hooks/useSearchChannels";
 import useSearchMovies from "../hooks/useSearchMovies";
@@ -34,11 +34,13 @@ function Home() {
     const [seriesGenres, setSeriesGenres] = useState([]);
     const [moviesGenres, setMoviesGenres] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
-    const { loading: allChannelsLoading, channels: allChannels, setChannels: setAllChannels } = useGetAllChannels();
-    const { loading: myChannelsLoading, channels: myChannels, setChannels: setUserChannels } = useGetUserChannels();
+    const [myChannels, setUserChannels] = useState([]);
+    const { loading: myChannelsLoading, getUserChannels } = useGetUserChannels();
+    const [allChannels, setAllChannels] = useState([]);
+    const { loading: allChannelsLoading, getAllChannels } = useGetAllChannels();
     const { selectedChannel } = useChannels();
-    const { joinedChannels }  = useGetJoinedChannels();
-    const { createdChannels } = useGetCreatedChannels();
+    // const { joinedChannels }  = useGetJoinedChannels();
+    // const { createdChannels } = useGetCreatedChannels();
     const [searchChannelFlag, setSearchChanneFlag] = useState('joined');
     const [searchGenreId, setSearchGenreId] = useState(null);
     const [searchPlaceholderGenre, setSearchPlaceholderGenre] = useState('');
@@ -72,16 +74,19 @@ function Home() {
       }
     }, []);
 
-    useEffect(() => {
-      fetchSeriesGenres();
-      fetchMoviesGenres();
-    }, []);
+    // useEffect(() => {
+    //   fetchSeriesGenres();
+    //   fetchMoviesGenres();
+    // }, []);
 
     function handleAllChannelsClicked(event) {
       // console.log(allChannels)
       if (searchChannelIsDisabled) {
         setSearchChannelIsDisabled(false)
       }
+
+      getAllChannels(setAllChannels)
+
       showContent();
       setSearchChanneFlag('all')
 
@@ -109,6 +114,9 @@ function Home() {
       if (searchChannelIsDisabled) {
         setSearchChannelIsDisabled(false)
       }
+
+      getUserChannels(setUserChannels)
+
       showContent();
       setSearchChanneFlag('joined')
 
@@ -136,6 +144,9 @@ function Home() {
       // console.log(link);
       // link.click();
       setSearchChannelIsDisabled(true)
+      if (moviesGenres.length === 0) {
+        fetchMoviesGenres();
+      }
       fetchTrendingMovies();
       // getMoviesChannelIds();
       showContent()
@@ -163,7 +174,11 @@ function Home() {
     function handlesSeriesCategoriesClicked(event) {
       // const link = document.getElementById('trending-series-link');
       // console.log(link)
+      
       // link.click();
+      if (seriesGenres.length === 0) {
+        fetchSeriesGenres();
+      }
       setSearchChannelIsDisabled(true)
       fetchTrendingSeries();
       // getSeriesChannelIds();

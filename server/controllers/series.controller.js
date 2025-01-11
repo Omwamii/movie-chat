@@ -79,8 +79,7 @@ export const getSeriesByGenre = async (req, res) => {
         // console.log('filtered by genre' + genreId);
         const filteredSeries = filterByGenre(Number(genreId), response.data.results);
         // console.log(filteredMovies);
-
-        // console.log()
+        
         res.json(filteredSeries);
     } catch (error) {
         console.error('Error fetching movies:', error.message);

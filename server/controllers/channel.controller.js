@@ -1,7 +1,7 @@
 import Channel from "../models/channel.model.js"
 import User from "../models/user.model.js";
 import Message from "../models/message.model.js";
-import mongoose from "mongoose";
+
 
 export const createChannel = async (req, res) => {
     const { title, filmId, type, creatorId, icon } = req.body;
@@ -48,7 +48,7 @@ export const getAllChannels = async (req, res) => {
     // console.log('get all');
     try {
         // Fetch all channels
-        const channels = await Channel.find()
+        const channels = await Channel.find().select("-messages")
 
         // console.log('all chanels', channels)
 
@@ -61,35 +61,15 @@ export const getAllChannels = async (req, res) => {
 
 export const getMyChannels = async (req, res) => {
     const userId = req.user._id;
-    // console.log('get mine')
-    // console.log(req.user)
 
     try {
-        const channels = await Channel.find().lean({ virtuals: true }).populate({
-            path: "messages",
-            populate: [
-                { path: "sender", select: "username" },
-                { path: "replyTo", populate: {
-                    path: "sender",
-                    select: "username _id"
-                }},
-            ],
+        const channels = await Channel.find({
+            users: { $in: [userId] },
         })
+        .lean({ virtuals: true })
+        .populate({ path: "lastMessage" , select: "createdAt text" })
 
-        for (const channel of channels) {
-            const unreadCount = await Message.countDocuments({
-                channel: channel._id,
-                readBy: { $ne: userId },
-            });
-            channel.unreadCount = unreadCount;
-
-            if (channel.messages && channel.messages.length > 0) {
-                const lastMessage = channel.messages[channel.messages.length - 1];
-                channel.lastMessage = lastMessage;
-            }
-        }
-
-        // console.log('user channels', channels)
+        // console.log(channels)
 
         return res.status(200).json(channels);
     } catch (error) {
@@ -216,17 +196,17 @@ export const searchChannels = async (req, res) => {
                 const joinedChannel = await Channel.findOne({
                     filmId: channelFilmId
                 })
-                .lean({ virtuals: true })
-                .populate({
-                        path: "messages",
-                        populate: [
-                            { path: "sender", select: "username" },
-                            { path: "replyTo", populate: {
-                                path: "sender",
-                                select: "username _id"
-                            }},
-                        ],
-                    })
+                // .lean({ virtuals: true })
+                // .populate({
+                //         path: "messages",
+                //         populate: [
+                //             { path: "sender", select: "username" },
+                //             { path: "replyTo", populate: {
+                //                 path: "sender",
+                //                 select: "username _id"
+                //             }},
+                //         ],
+                //     })
 
                 if (joinedChannel && joinedChannel.title.toLowerCase().includes(query.toLowerCase())) {
                     const unreadCount = await Message.countDocuments({

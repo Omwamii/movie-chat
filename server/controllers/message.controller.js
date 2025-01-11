@@ -24,6 +24,7 @@ export const sendMessage = async (req, res) => {
         
         if (newMessage) {
             channel.messages.push(newMessage._id)
+            channel.lastMessage = newMessage
             channel.save()
         }
 
